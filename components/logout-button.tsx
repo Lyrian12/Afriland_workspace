@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 
 export function LogoutButton() {
   const router = useRouter();
@@ -17,9 +18,10 @@ export function LogoutButton() {
     <Button
       onClick={logout}
       size="sm"
-      className="rounded-full bg-[var(--c-black)] px-4 text-white hover:bg-[var(--c-black)]/90 dark:bg-white dark:text-black dark:hover:bg-white/90"
+      className="rounded-full bg-[var(--c-black)] px-3 text-white hover:bg-[var(--c-black)]/90 dark:bg-white dark:text-black dark:hover:bg-white/90"
+      title="Se déconnecter"
     >
-      Se deconnecter
+      <LogOut className="h-4 w-4" />
     </Button>
   );
 }
