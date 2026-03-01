@@ -1,0 +1,249 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// ⚠️ Plus de datasource url ici en Prisma 7 !
+// La connexion est gérée dans prisma.config.ts
+datasource db {
+  provider = "postgresql"
+}
+
+// ENUMS
+// ─────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  SECRETARY
+  USER
+}
+
+enum MemberStatus {
+  ACTIVE
+  BANNED
+  BLOCKED
+}
+
+enum RecordingStatus {
+  PENDING
+  TRANSCRIBED
+  SUMMARIZED
+  EXPORTED
+}
+
+enum MessageType {
+  TEXT
+  FILE
+  AUDIO
+  IMAGE
+}
+
+// ─────────────────────────────────────────
+// USER
+// ─────────────────────────────────────────
+
+model User {
+  id        String   @id
+  email     String   @unique
+  name      String?
+  avatar    String?
+  bio       String?
+  phone     String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  recordings       Recording[]
+  meetingAttendees MeetingAttendee[]
+  createdMeetings  Meeting[]         @relation("MeetingCreator")
+  ownedSpaces      Space[]           @relation("SpaceOwner")
+  spaceMemberships SpaceMember[]
+  createdChannels  Channel[]         @relation("ChannelCreator")
+  messages         Message[]
+  sentOtpInvites   OtpInvite[]       @relation("OtpSender")
+}
+
+// ─────────────────────────────────────────
+// 1. AFRILAND RECORD
+// ─────────────────────────────────────────
+
+model Recording {
+  id             String          @id @default(cuid())
+  title          String
+  audioUrl       String
+  duration       Int?
+  transcription  String?         @db.Text
+  summary        String?         @db.Text
+  status         RecordingStatus @default(PENDING)
+  exportedPdfUrl String?
+  language       String          @default("fr")
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  createdBy User   @relation(fields: [userId], references: [id])
+  userId    String
+
+  @@index([userId])
+}
+
+// ─────────────────────────────────────────
+// 2. AFRILAND ROOM
+// ─────────────────────────────────────────
+
+model Room {
+  id          String   @id @default(cuid())
+  name        String // "Salle A", "Salle B", "Salle C", "Salle D"
+  capacity    Int      @default(20)
+  location    String?
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  meetings Meeting[]
+}
+
+model Meeting {
+  id          String   @id @default(cuid())
+  title       String
+  description String?  @db.Text
+  startTime   DateTime
+  endTime     DateTime
+  color       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  room   Room   @relation(fields: [roomId], references: [id])
+  roomId String
+
+  createdBy User   @relation("MeetingCreator", fields: [userId], references: [id])
+  userId    String
+
+  attendees MeetingAttendee[]
+
+  @@index([roomId])
+  @@index([startTime, endTime])
+}
+
+model MeetingAttendee {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String?
+  isPresent Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  meeting   Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  meetingId String
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  @@unique([meetingId, userId])
+  @@index([meetingId])
+}
+
+// ─────────────────────────────────────────
+// 3. AFRILAND SPACE
+// ─────────────────────────────────────────
+
+model Space {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  icon        String?
+  isPrivate   Boolean  @default(false)
+  inviteCode  String?  @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner   User   @relation("SpaceOwner", fields: [ownerId], references: [id])
+  ownerId String
+
+  members    SpaceMember[]
+  channels   Channel[]
+  otpInvites OtpInvite[]
+
+  @@index([ownerId])
+}
+
+model SpaceMember {
+  id           String       @id @default(cuid())
+  status       MemberStatus @default(ACTIVE)
+  role         Role         @default(USER)
+  joinedAt     DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  blockedUntil DateTime?
+  banReason    String?
+
+  space   Space  @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  spaceId String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@unique([spaceId, userId])
+  @@index([spaceId])
+}
+
+model Channel {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  space   Space  @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  spaceId String
+
+  createdBy User   @relation("ChannelCreator", fields: [userId], references: [id])
+  userId    String
+
+  messages Message[]
+
+  @@unique([spaceId, name])
+  @@index([spaceId])
+}
+
+model Message {
+  id        String      @id @default(cuid())
+  content   String      @db.Text
+  type      MessageType @default(TEXT)
+  fileUrl   String?
+  editedAt  DateTime?
+  createdAt DateTime    @default(now())
+
+  channel   Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  channelId String
+
+  sender User   @relation(fields: [userId], references: [id])
+  userId String
+
+  replyTo   Message?  @relation("MessageReplies", fields: [replyToId], references: [id])
+  replyToId String?
+  replies   Message[] @relation("MessageReplies")
+
+  @@index([channelId])
+  @@index([userId])
+}
+
+// ─────────────────────────────────────────
+// OTP INVITE
+// ─────────────────────────────────────────
+
+model OtpInvite {
+  id        String    @id @default(cuid())
+  email     String
+  code      String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  space   Space  @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  spaceId String
+
+  sentBy User   @relation("OtpSender", fields: [userId], references: [id])
+  userId String
+
+  @@index([email, code])
+  @@index([spaceId])
+}
