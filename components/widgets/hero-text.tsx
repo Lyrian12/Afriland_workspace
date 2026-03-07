@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import  { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Mic, Monitor, ArrowRight } from "lucide-react";
@@ -35,7 +35,7 @@ export const HeroText = () => {
       border: "border border-black",
       iconBg: "bg-black text-white",
       arrowBg: "bg-black text-white",
-      link: null,
+      link: "/room",
     },
     {
       name: "AFRILAND RECORD",
