@@ -1,15 +1,1 @@
-i  am creating a workspace for a bank enterprise 
-it have three main features 
-1. the recording feature 
-when there is a meeting on microsoft teams or you active the recorder of your machine and you click the button record in the feature it activate openiawhisper to resume the meeting after that it stock it in a pdf file and when it is ready you can download it locally or share to a user in the app the pdf must have some specific information like the date,hour, of the begining of the meeting and the end and the main subject of it 
-2.the scheduler feature 
-there are 4 halls for meeting in the bank and sometimes there are a lot of misunderstanding because there is no management so the scheduler is there for it ther will be a calendar having the between 8 am and 18 pm and between monday and friday when the schedule a meeting in there are specific required information to fill the description,the attenders,and fill the time begining and the expecting end and the must important the main subject of the meeting 
-3.the afriland space
-here is litterally the working space a user can create is space_work it will fill a formular demanding is name for the space,his role at afrilandfirstbank and the name of the space in the space he can invite users he will recognize the users by their name to validate a user in the space he will receive a otp to be ther in the space the will be a small chat appto discuss the main subjects in there like live discussions between everyone in the space and the creator of the space is the admin he can manage his space by removing everone he want    
 
-
-
-
-
-
-maintenant dans le bento live occupency changer vous mettez afriland record et vous mettez le dessin des audios et un recorder mais vous gardez le meme aspect dans le deuxieme faites un truc qui pourra faire directement penser au scheduler pour l organisation des taches garder le meme aspect vous le nomerer afriland room et le dernier c'est afiland space representer quelque chose qui fait appel au coworking et vous le nomerez afriland space 
