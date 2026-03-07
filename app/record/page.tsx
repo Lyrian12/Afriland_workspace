@@ -3,8 +3,15 @@ import { createClient } from "@/lib/supabase/server";
 import { RecordClient } from "@/app/record/record-client";
 import { Suspense } from "react";
 
+export default function RecordPage() {
+  return (
+    <Suspense fallback={<div className="h-screen w-full flex items-center justify-center bg-[#0A0A0A] text-white">Chargement...</div>}>
+      <RecordContent />
+    </Suspense>
+  );
+}
 
-export default async function RecordPage() {
+async function RecordContent() {
   const supabase = await createClient();
   const {
     data: { user },
@@ -22,9 +29,5 @@ export default async function RecordPage() {
     userName = user.email ? user.email.split('@')[0] : "Utilisateur";
   }
 
-  return (
-    <Suspense>
-      <RecordClient userName={userName} avatarUrl={avatarUrl} />
-    </Suspense>
-  );
+  return <RecordClient userName={userName} avatarUrl={avatarUrl} />;
 }
