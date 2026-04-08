@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import Link from 'next/link';
 import { AfrilandCard } from '../afriland-card';
 import { motion } from 'framer-motion';
 import { Armchair, Users, Zap, LayoutGrid } from 'lucide-react';
@@ -14,8 +15,9 @@ export const SpaceWidget = () => {
     ];
 
   return (
-    <AfrilandCard variant="grey" gridColumn="span 4" delay={0.4} className="max-lg:col-span-12 relative overflow-hidden group">
-      <div className="flex justify-between items-start mb-2">
+    <Link href="/space-intro" className="col-span-12 max-lg:col-span-12 lg:col-span-4 block">
+      <AfrilandCard variant="grey" delay={0.4} className="h-full relative overflow-hidden group">
+        <div className="flex justify-between items-start mb-2">
          <div>
             <span className="font-mono text-[11px] uppercase tracking-wider text-[#666]">
             Afriland Space
@@ -48,5 +50,6 @@ export const SpaceWidget = () => {
         ))}
       </div>
     </AfrilandCard>
+    </Link>
   );
 };

@@ -58,9 +58,11 @@ export const ModelName = {
   MeetingAttendee: 'MeetingAttendee',
   Space: 'Space',
   SpaceMember: 'SpaceMember',
+  Warning: 'Warning',
   Channel: 'Channel',
   Message: 'Message',
-  OtpInvite: 'OtpInvite'
+  OtpInvite: 'OtpInvite',
+  Notification: 'Notification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -118,6 +120,7 @@ export const RoomScalarFieldEnum = {
   capacity: 'capacity',
   location: 'location',
   description: 'description',
+  color: 'color',
   isActive: 'isActive',
   createdAt: 'createdAt'
 } as const
@@ -159,8 +162,8 @@ export const SpaceScalarFieldEnum = {
   name: 'name',
   description: 'description',
   icon: 'icon',
-  isPrivate: 'isPrivate',
-  inviteCode: 'inviteCode',
+  objective: 'objective',
+  adminRole: 'adminRole',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   ownerId: 'ownerId'
@@ -171,17 +174,27 @@ export type SpaceScalarFieldEnum = (typeof SpaceScalarFieldEnum)[keyof typeof Sp
 
 export const SpaceMemberScalarFieldEnum = {
   id: 'id',
-  status: 'status',
   role: 'role',
+  status: 'status',
   joinedAt: 'joinedAt',
   updatedAt: 'updatedAt',
   blockedUntil: 'blockedUntil',
-  banReason: 'banReason',
   spaceId: 'spaceId',
   userId: 'userId'
 } as const
 
 export type SpaceMemberScalarFieldEnum = (typeof SpaceMemberScalarFieldEnum)[keyof typeof SpaceMemberScalarFieldEnum]
+
+
+export const WarningScalarFieldEnum = {
+  id: 'id',
+  reason: 'reason',
+  createdAt: 'createdAt',
+  memberId: 'memberId',
+  userId: 'userId'
+} as const
+
+export type WarningScalarFieldEnum = (typeof WarningScalarFieldEnum)[keyof typeof WarningScalarFieldEnum]
 
 
 export const ChannelScalarFieldEnum = {
@@ -203,6 +216,8 @@ export const MessageScalarFieldEnum = {
   content: 'content',
   type: 'type',
   fileUrl: 'fileUrl',
+  isPinned: 'isPinned',
+  pinnedAt: 'pinnedAt',
   editedAt: 'editedAt',
   createdAt: 'createdAt',
   channelId: 'channelId',
@@ -225,6 +240,19 @@ export const OtpInviteScalarFieldEnum = {
 } as const
 
 export type OtpInviteScalarFieldEnum = (typeof OtpInviteScalarFieldEnum)[keyof typeof OtpInviteScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  read: 'read',
+  createdAt: 'createdAt',
+  memberId: 'memberId',
+  channelId: 'channelId',
+  messageId: 'messageId'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -225,11 +225,11 @@ export type OtpInviteOrderByWithRelationInput = {
 
 export type OtpInviteWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  code?: string
   AND?: Prisma.OtpInviteWhereInput | Prisma.OtpInviteWhereInput[]
   OR?: Prisma.OtpInviteWhereInput[]
   NOT?: Prisma.OtpInviteWhereInput | Prisma.OtpInviteWhereInput[]
   email?: Prisma.StringFilter<"OtpInvite"> | string
-  code?: Prisma.StringFilter<"OtpInvite"> | string
   expiresAt?: Prisma.DateTimeFilter<"OtpInvite"> | Date | string
   usedAt?: Prisma.DateTimeNullableFilter<"OtpInvite"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"OtpInvite"> | Date | string
@@ -237,7 +237,7 @@ export type OtpInviteWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.StringFilter<"OtpInvite"> | string
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   sentBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id">
+}, "id" | "code">
 
 export type OtpInviteOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

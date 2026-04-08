@@ -53,6 +53,11 @@ export type Space = Prisma.SpaceModel
  */
 export type SpaceMember = Prisma.SpaceMemberModel
 /**
+ * Model Warning
+ * 
+ */
+export type Warning = Prisma.WarningModel
+/**
  * Model Channel
  * 
  */
@@ -67,3 +72,8 @@ export type Message = Prisma.MessageModel
  * 
  */
 export type OtpInvite = Prisma.OtpInviteModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel

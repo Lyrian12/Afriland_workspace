@@ -29,6 +29,8 @@ export type MessageMinAggregateOutputType = {
   content: string | null
   type: $Enums.MessageType | null
   fileUrl: string | null
+  isPinned: boolean | null
+  pinnedAt: Date | null
   editedAt: Date | null
   createdAt: Date | null
   channelId: string | null
@@ -41,6 +43,8 @@ export type MessageMaxAggregateOutputType = {
   content: string | null
   type: $Enums.MessageType | null
   fileUrl: string | null
+  isPinned: boolean | null
+  pinnedAt: Date | null
   editedAt: Date | null
   createdAt: Date | null
   channelId: string | null
@@ -53,6 +57,8 @@ export type MessageCountAggregateOutputType = {
   content: number
   type: number
   fileUrl: number
+  isPinned: number
+  pinnedAt: number
   editedAt: number
   createdAt: number
   channelId: number
@@ -67,6 +73,8 @@ export type MessageMinAggregateInputType = {
   content?: true
   type?: true
   fileUrl?: true
+  isPinned?: true
+  pinnedAt?: true
   editedAt?: true
   createdAt?: true
   channelId?: true
@@ -79,6 +87,8 @@ export type MessageMaxAggregateInputType = {
   content?: true
   type?: true
   fileUrl?: true
+  isPinned?: true
+  pinnedAt?: true
   editedAt?: true
   createdAt?: true
   channelId?: true
@@ -91,6 +101,8 @@ export type MessageCountAggregateInputType = {
   content?: true
   type?: true
   fileUrl?: true
+  isPinned?: true
+  pinnedAt?: true
   editedAt?: true
   createdAt?: true
   channelId?: true
@@ -176,6 +188,8 @@ export type MessageGroupByOutputType = {
   content: string
   type: $Enums.MessageType
   fileUrl: string | null
+  isPinned: boolean
+  pinnedAt: Date | null
   editedAt: Date | null
   createdAt: Date
   channelId: string
@@ -209,6 +223,8 @@ export type MessageWhereInput = {
   content?: Prisma.StringFilter<"Message"> | string
   type?: Prisma.EnumMessageTypeFilter<"Message"> | $Enums.MessageType
   fileUrl?: Prisma.StringNullableFilter<"Message"> | string | null
+  isPinned?: Prisma.BoolFilter<"Message"> | boolean
+  pinnedAt?: Prisma.DateTimeNullableFilter<"Message"> | Date | string | null
   editedAt?: Prisma.DateTimeNullableFilter<"Message"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Message"> | Date | string
   channelId?: Prisma.StringFilter<"Message"> | string
@@ -218,6 +234,7 @@ export type MessageWhereInput = {
   sender?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   replyTo?: Prisma.XOR<Prisma.MessageNullableScalarRelationFilter, Prisma.MessageWhereInput> | null
   replies?: Prisma.MessageListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }
 
 export type MessageOrderByWithRelationInput = {
@@ -225,6 +242,8 @@ export type MessageOrderByWithRelationInput = {
   content?: Prisma.SortOrder
   type?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  isPinned?: Prisma.SortOrder
+  pinnedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   editedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   channelId?: Prisma.SortOrder
@@ -234,6 +253,7 @@ export type MessageOrderByWithRelationInput = {
   sender?: Prisma.UserOrderByWithRelationInput
   replyTo?: Prisma.MessageOrderByWithRelationInput
   replies?: Prisma.MessageOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
 }
 
 export type MessageWhereUniqueInput = Prisma.AtLeast<{
@@ -244,6 +264,8 @@ export type MessageWhereUniqueInput = Prisma.AtLeast<{
   content?: Prisma.StringFilter<"Message"> | string
   type?: Prisma.EnumMessageTypeFilter<"Message"> | $Enums.MessageType
   fileUrl?: Prisma.StringNullableFilter<"Message"> | string | null
+  isPinned?: Prisma.BoolFilter<"Message"> | boolean
+  pinnedAt?: Prisma.DateTimeNullableFilter<"Message"> | Date | string | null
   editedAt?: Prisma.DateTimeNullableFilter<"Message"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Message"> | Date | string
   channelId?: Prisma.StringFilter<"Message"> | string
@@ -253,6 +275,7 @@ export type MessageWhereUniqueInput = Prisma.AtLeast<{
   sender?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   replyTo?: Prisma.XOR<Prisma.MessageNullableScalarRelationFilter, Prisma.MessageWhereInput> | null
   replies?: Prisma.MessageListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }, "id">
 
 export type MessageOrderByWithAggregationInput = {
@@ -260,6 +283,8 @@ export type MessageOrderByWithAggregationInput = {
   content?: Prisma.SortOrder
   type?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  isPinned?: Prisma.SortOrder
+  pinnedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   editedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   channelId?: Prisma.SortOrder
@@ -278,6 +303,8 @@ export type MessageScalarWhereWithAggregatesInput = {
   content?: Prisma.StringWithAggregatesFilter<"Message"> | string
   type?: Prisma.EnumMessageTypeWithAggregatesFilter<"Message"> | $Enums.MessageType
   fileUrl?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
+  isPinned?: Prisma.BoolWithAggregatesFilter<"Message"> | boolean
+  pinnedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Message"> | Date | string | null
   editedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Message"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Message"> | Date | string
   channelId?: Prisma.StringWithAggregatesFilter<"Message"> | string
@@ -290,12 +317,15 @@ export type MessageCreateInput = {
   content: string
   type?: $Enums.MessageType
   fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
   editedAt?: Date | string | null
   createdAt?: Date | string
   channel: Prisma.ChannelCreateNestedOneWithoutMessagesInput
   sender: Prisma.UserCreateNestedOneWithoutMessagesInput
   replyTo?: Prisma.MessageCreateNestedOneWithoutRepliesInput
   replies?: Prisma.MessageCreateNestedManyWithoutReplyToInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMessageInput
 }
 
 export type MessageUncheckedCreateInput = {
@@ -303,12 +333,15 @@ export type MessageUncheckedCreateInput = {
   content: string
   type?: $Enums.MessageType
   fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
   editedAt?: Date | string | null
   createdAt?: Date | string
   channelId: string
   userId: string
   replyToId?: string | null
   replies?: Prisma.MessageUncheckedCreateNestedManyWithoutReplyToInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMessageInput
 }
 
 export type MessageUpdateInput = {
@@ -316,12 +349,15 @@ export type MessageUpdateInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   channel?: Prisma.ChannelUpdateOneRequiredWithoutMessagesNestedInput
   sender?: Prisma.UserUpdateOneRequiredWithoutMessagesNestedInput
   replyTo?: Prisma.MessageUpdateOneWithoutRepliesNestedInput
   replies?: Prisma.MessageUpdateManyWithoutReplyToNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMessageNestedInput
 }
 
 export type MessageUncheckedUpdateInput = {
@@ -329,12 +365,15 @@ export type MessageUncheckedUpdateInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   channelId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   replyToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   replies?: Prisma.MessageUncheckedUpdateManyWithoutReplyToNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMessageNestedInput
 }
 
 export type MessageCreateManyInput = {
@@ -342,6 +381,8 @@ export type MessageCreateManyInput = {
   content: string
   type?: $Enums.MessageType
   fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
   editedAt?: Date | string | null
   createdAt?: Date | string
   channelId: string
@@ -354,6 +395,8 @@ export type MessageUpdateManyMutationInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -363,6 +406,8 @@ export type MessageUncheckedUpdateManyInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   channelId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -390,6 +435,8 @@ export type MessageCountOrderByAggregateInput = {
   content?: Prisma.SortOrder
   type?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
+  isPinned?: Prisma.SortOrder
+  pinnedAt?: Prisma.SortOrder
   editedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   channelId?: Prisma.SortOrder
@@ -402,6 +449,8 @@ export type MessageMaxOrderByAggregateInput = {
   content?: Prisma.SortOrder
   type?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
+  isPinned?: Prisma.SortOrder
+  pinnedAt?: Prisma.SortOrder
   editedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   channelId?: Prisma.SortOrder
@@ -414,6 +463,8 @@ export type MessageMinOrderByAggregateInput = {
   content?: Prisma.SortOrder
   type?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
+  isPinned?: Prisma.SortOrder
+  pinnedAt?: Prisma.SortOrder
   editedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   channelId?: Prisma.SortOrder
@@ -567,16 +618,35 @@ export type MessageUncheckedUpdateManyWithoutReplyToNestedInput = {
   deleteMany?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
 }
 
+export type MessageCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutNotificationsInput, Prisma.MessageUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.MessageWhereUniqueInput
+}
+
+export type MessageUpdateOneWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutNotificationsInput, Prisma.MessageUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.MessageUpsertWithoutNotificationsInput
+  disconnect?: Prisma.MessageWhereInput | boolean
+  delete?: Prisma.MessageWhereInput | boolean
+  connect?: Prisma.MessageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MessageUpdateToOneWithWhereWithoutNotificationsInput, Prisma.MessageUpdateWithoutNotificationsInput>, Prisma.MessageUncheckedUpdateWithoutNotificationsInput>
+}
+
 export type MessageCreateWithoutSenderInput = {
   id?: string
   content: string
   type?: $Enums.MessageType
   fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
   editedAt?: Date | string | null
   createdAt?: Date | string
   channel: Prisma.ChannelCreateNestedOneWithoutMessagesInput
   replyTo?: Prisma.MessageCreateNestedOneWithoutRepliesInput
   replies?: Prisma.MessageCreateNestedManyWithoutReplyToInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMessageInput
 }
 
 export type MessageUncheckedCreateWithoutSenderInput = {
@@ -584,11 +654,14 @@ export type MessageUncheckedCreateWithoutSenderInput = {
   content: string
   type?: $Enums.MessageType
   fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
   editedAt?: Date | string | null
   createdAt?: Date | string
   channelId: string
   replyToId?: string | null
   replies?: Prisma.MessageUncheckedCreateNestedManyWithoutReplyToInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMessageInput
 }
 
 export type MessageCreateOrConnectWithoutSenderInput = {
@@ -625,6 +698,8 @@ export type MessageScalarWhereInput = {
   content?: Prisma.StringFilter<"Message"> | string
   type?: Prisma.EnumMessageTypeFilter<"Message"> | $Enums.MessageType
   fileUrl?: Prisma.StringNullableFilter<"Message"> | string | null
+  isPinned?: Prisma.BoolFilter<"Message"> | boolean
+  pinnedAt?: Prisma.DateTimeNullableFilter<"Message"> | Date | string | null
   editedAt?: Prisma.DateTimeNullableFilter<"Message"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Message"> | Date | string
   channelId?: Prisma.StringFilter<"Message"> | string
@@ -637,11 +712,14 @@ export type MessageCreateWithoutChannelInput = {
   content: string
   type?: $Enums.MessageType
   fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
   editedAt?: Date | string | null
   createdAt?: Date | string
   sender: Prisma.UserCreateNestedOneWithoutMessagesInput
   replyTo?: Prisma.MessageCreateNestedOneWithoutRepliesInput
   replies?: Prisma.MessageCreateNestedManyWithoutReplyToInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMessageInput
 }
 
 export type MessageUncheckedCreateWithoutChannelInput = {
@@ -649,11 +727,14 @@ export type MessageUncheckedCreateWithoutChannelInput = {
   content: string
   type?: $Enums.MessageType
   fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
   editedAt?: Date | string | null
   createdAt?: Date | string
   userId: string
   replyToId?: string | null
   replies?: Prisma.MessageUncheckedCreateNestedManyWithoutReplyToInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMessageInput
 }
 
 export type MessageCreateOrConnectWithoutChannelInput = {
@@ -687,11 +768,14 @@ export type MessageCreateWithoutRepliesInput = {
   content: string
   type?: $Enums.MessageType
   fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
   editedAt?: Date | string | null
   createdAt?: Date | string
   channel: Prisma.ChannelCreateNestedOneWithoutMessagesInput
   sender: Prisma.UserCreateNestedOneWithoutMessagesInput
   replyTo?: Prisma.MessageCreateNestedOneWithoutRepliesInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMessageInput
 }
 
 export type MessageUncheckedCreateWithoutRepliesInput = {
@@ -699,11 +783,14 @@ export type MessageUncheckedCreateWithoutRepliesInput = {
   content: string
   type?: $Enums.MessageType
   fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
   editedAt?: Date | string | null
   createdAt?: Date | string
   channelId: string
   userId: string
   replyToId?: string | null
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMessageInput
 }
 
 export type MessageCreateOrConnectWithoutRepliesInput = {
@@ -716,11 +803,14 @@ export type MessageCreateWithoutReplyToInput = {
   content: string
   type?: $Enums.MessageType
   fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
   editedAt?: Date | string | null
   createdAt?: Date | string
   channel: Prisma.ChannelCreateNestedOneWithoutMessagesInput
   sender: Prisma.UserCreateNestedOneWithoutMessagesInput
   replies?: Prisma.MessageCreateNestedManyWithoutReplyToInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMessageInput
 }
 
 export type MessageUncheckedCreateWithoutReplyToInput = {
@@ -728,11 +818,14 @@ export type MessageUncheckedCreateWithoutReplyToInput = {
   content: string
   type?: $Enums.MessageType
   fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
   editedAt?: Date | string | null
   createdAt?: Date | string
   channelId: string
   userId: string
   replies?: Prisma.MessageUncheckedCreateNestedManyWithoutReplyToInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMessageInput
 }
 
 export type MessageCreateOrConnectWithoutReplyToInput = {
@@ -761,11 +854,14 @@ export type MessageUpdateWithoutRepliesInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   channel?: Prisma.ChannelUpdateOneRequiredWithoutMessagesNestedInput
   sender?: Prisma.UserUpdateOneRequiredWithoutMessagesNestedInput
   replyTo?: Prisma.MessageUpdateOneWithoutRepliesNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMessageNestedInput
 }
 
 export type MessageUncheckedUpdateWithoutRepliesInput = {
@@ -773,11 +869,14 @@ export type MessageUncheckedUpdateWithoutRepliesInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   channelId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   replyToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMessageNestedInput
 }
 
 export type MessageUpsertWithWhereUniqueWithoutReplyToInput = {
@@ -796,11 +895,89 @@ export type MessageUpdateManyWithWhereWithoutReplyToInput = {
   data: Prisma.XOR<Prisma.MessageUpdateManyMutationInput, Prisma.MessageUncheckedUpdateManyWithoutReplyToInput>
 }
 
+export type MessageCreateWithoutNotificationsInput = {
+  id?: string
+  content: string
+  type?: $Enums.MessageType
+  fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
+  editedAt?: Date | string | null
+  createdAt?: Date | string
+  channel: Prisma.ChannelCreateNestedOneWithoutMessagesInput
+  sender: Prisma.UserCreateNestedOneWithoutMessagesInput
+  replyTo?: Prisma.MessageCreateNestedOneWithoutRepliesInput
+  replies?: Prisma.MessageCreateNestedManyWithoutReplyToInput
+}
+
+export type MessageUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  content: string
+  type?: $Enums.MessageType
+  fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
+  editedAt?: Date | string | null
+  createdAt?: Date | string
+  channelId: string
+  userId: string
+  replyToId?: string | null
+  replies?: Prisma.MessageUncheckedCreateNestedManyWithoutReplyToInput
+}
+
+export type MessageCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.MessageWhereUniqueInput
+  create: Prisma.XOR<Prisma.MessageCreateWithoutNotificationsInput, Prisma.MessageUncheckedCreateWithoutNotificationsInput>
+}
+
+export type MessageUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.MessageUpdateWithoutNotificationsInput, Prisma.MessageUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.MessageCreateWithoutNotificationsInput, Prisma.MessageUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.MessageWhereInput
+}
+
+export type MessageUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.MessageWhereInput
+  data: Prisma.XOR<Prisma.MessageUpdateWithoutNotificationsInput, Prisma.MessageUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type MessageUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  channel?: Prisma.ChannelUpdateOneRequiredWithoutMessagesNestedInput
+  sender?: Prisma.UserUpdateOneRequiredWithoutMessagesNestedInput
+  replyTo?: Prisma.MessageUpdateOneWithoutRepliesNestedInput
+  replies?: Prisma.MessageUpdateManyWithoutReplyToNestedInput
+}
+
+export type MessageUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  channelId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  replyToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replies?: Prisma.MessageUncheckedUpdateManyWithoutReplyToNestedInput
+}
+
 export type MessageCreateManySenderInput = {
   id?: string
   content: string
   type?: $Enums.MessageType
   fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
   editedAt?: Date | string | null
   createdAt?: Date | string
   channelId: string
@@ -812,11 +989,14 @@ export type MessageUpdateWithoutSenderInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   channel?: Prisma.ChannelUpdateOneRequiredWithoutMessagesNestedInput
   replyTo?: Prisma.MessageUpdateOneWithoutRepliesNestedInput
   replies?: Prisma.MessageUpdateManyWithoutReplyToNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMessageNestedInput
 }
 
 export type MessageUncheckedUpdateWithoutSenderInput = {
@@ -824,11 +1004,14 @@ export type MessageUncheckedUpdateWithoutSenderInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   channelId?: Prisma.StringFieldUpdateOperationsInput | string
   replyToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   replies?: Prisma.MessageUncheckedUpdateManyWithoutReplyToNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMessageNestedInput
 }
 
 export type MessageUncheckedUpdateManyWithoutSenderInput = {
@@ -836,6 +1019,8 @@ export type MessageUncheckedUpdateManyWithoutSenderInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   channelId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -847,6 +1032,8 @@ export type MessageCreateManyChannelInput = {
   content: string
   type?: $Enums.MessageType
   fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
   editedAt?: Date | string | null
   createdAt?: Date | string
   userId: string
@@ -858,11 +1045,14 @@ export type MessageUpdateWithoutChannelInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sender?: Prisma.UserUpdateOneRequiredWithoutMessagesNestedInput
   replyTo?: Prisma.MessageUpdateOneWithoutRepliesNestedInput
   replies?: Prisma.MessageUpdateManyWithoutReplyToNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMessageNestedInput
 }
 
 export type MessageUncheckedUpdateWithoutChannelInput = {
@@ -870,11 +1060,14 @@ export type MessageUncheckedUpdateWithoutChannelInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   replyToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   replies?: Prisma.MessageUncheckedUpdateManyWithoutReplyToNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMessageNestedInput
 }
 
 export type MessageUncheckedUpdateManyWithoutChannelInput = {
@@ -882,6 +1075,8 @@ export type MessageUncheckedUpdateManyWithoutChannelInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -893,6 +1088,8 @@ export type MessageCreateManyReplyToInput = {
   content: string
   type?: $Enums.MessageType
   fileUrl?: string | null
+  isPinned?: boolean
+  pinnedAt?: Date | string | null
   editedAt?: Date | string | null
   createdAt?: Date | string
   channelId: string
@@ -904,11 +1101,14 @@ export type MessageUpdateWithoutReplyToInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   channel?: Prisma.ChannelUpdateOneRequiredWithoutMessagesNestedInput
   sender?: Prisma.UserUpdateOneRequiredWithoutMessagesNestedInput
   replies?: Prisma.MessageUpdateManyWithoutReplyToNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMessageNestedInput
 }
 
 export type MessageUncheckedUpdateWithoutReplyToInput = {
@@ -916,11 +1116,14 @@ export type MessageUncheckedUpdateWithoutReplyToInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   channelId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   replies?: Prisma.MessageUncheckedUpdateManyWithoutReplyToNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMessageNestedInput
 }
 
 export type MessageUncheckedUpdateManyWithoutReplyToInput = {
@@ -928,6 +1131,8 @@ export type MessageUncheckedUpdateManyWithoutReplyToInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   channelId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -941,10 +1146,12 @@ export type MessageUncheckedUpdateManyWithoutReplyToInput = {
 
 export type MessageCountOutputType = {
   replies: number
+  notifications: number
 }
 
 export type MessageCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   replies?: boolean | MessageCountOutputTypeCountRepliesArgs
+  notifications?: boolean | MessageCountOutputTypeCountNotificationsArgs
 }
 
 /**
@@ -964,12 +1171,21 @@ export type MessageCountOutputTypeCountRepliesArgs<ExtArgs extends runtime.Types
   where?: Prisma.MessageWhereInput
 }
 
+/**
+ * MessageCountOutputType without action
+ */
+export type MessageCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
 
 export type MessageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   content?: boolean
   type?: boolean
   fileUrl?: boolean
+  isPinned?: boolean
+  pinnedAt?: boolean
   editedAt?: boolean
   createdAt?: boolean
   channelId?: boolean
@@ -979,6 +1195,7 @@ export type MessageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   sender?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   replyTo?: boolean | Prisma.Message$replyToArgs<ExtArgs>
   replies?: boolean | Prisma.Message$repliesArgs<ExtArgs>
+  notifications?: boolean | Prisma.Message$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.MessageCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["message"]>
 
@@ -987,6 +1204,8 @@ export type MessageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   content?: boolean
   type?: boolean
   fileUrl?: boolean
+  isPinned?: boolean
+  pinnedAt?: boolean
   editedAt?: boolean
   createdAt?: boolean
   channelId?: boolean
@@ -1002,6 +1221,8 @@ export type MessageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   content?: boolean
   type?: boolean
   fileUrl?: boolean
+  isPinned?: boolean
+  pinnedAt?: boolean
   editedAt?: boolean
   createdAt?: boolean
   channelId?: boolean
@@ -1017,6 +1238,8 @@ export type MessageSelectScalar = {
   content?: boolean
   type?: boolean
   fileUrl?: boolean
+  isPinned?: boolean
+  pinnedAt?: boolean
   editedAt?: boolean
   createdAt?: boolean
   channelId?: boolean
@@ -1024,12 +1247,13 @@ export type MessageSelectScalar = {
   replyToId?: boolean
 }
 
-export type MessageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "content" | "type" | "fileUrl" | "editedAt" | "createdAt" | "channelId" | "userId" | "replyToId", ExtArgs["result"]["message"]>
+export type MessageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "content" | "type" | "fileUrl" | "isPinned" | "pinnedAt" | "editedAt" | "createdAt" | "channelId" | "userId" | "replyToId", ExtArgs["result"]["message"]>
 export type MessageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   channel?: boolean | Prisma.ChannelDefaultArgs<ExtArgs>
   sender?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   replyTo?: boolean | Prisma.Message$replyToArgs<ExtArgs>
   replies?: boolean | Prisma.Message$repliesArgs<ExtArgs>
+  notifications?: boolean | Prisma.Message$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.MessageCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MessageIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1050,12 +1274,15 @@ export type $MessagePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     sender: Prisma.$UserPayload<ExtArgs>
     replyTo: Prisma.$MessagePayload<ExtArgs> | null
     replies: Prisma.$MessagePayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     content: string
     type: $Enums.MessageType
     fileUrl: string | null
+    isPinned: boolean
+    pinnedAt: Date | null
     editedAt: Date | null
     createdAt: Date
     channelId: string
@@ -1459,6 +1686,7 @@ export interface Prisma__MessageClient<T, Null = never, ExtArgs extends runtime.
   sender<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   replyTo<T extends Prisma.Message$replyToArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Message$replyToArgs<ExtArgs>>): Prisma.Prisma__MessageClient<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   replies<T extends Prisma.Message$repliesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Message$repliesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.Message$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Message$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1492,6 +1720,8 @@ export interface MessageFieldRefs {
   readonly content: Prisma.FieldRef<"Message", 'String'>
   readonly type: Prisma.FieldRef<"Message", 'MessageType'>
   readonly fileUrl: Prisma.FieldRef<"Message", 'String'>
+  readonly isPinned: Prisma.FieldRef<"Message", 'Boolean'>
+  readonly pinnedAt: Prisma.FieldRef<"Message", 'DateTime'>
   readonly editedAt: Prisma.FieldRef<"Message", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Message", 'DateTime'>
   readonly channelId: Prisma.FieldRef<"Message", 'String'>
@@ -1933,6 +2163,30 @@ export type Message$repliesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.MessageScalarFieldEnum | Prisma.MessageScalarFieldEnum[]
+}
+
+/**
+ * Message.notifications
+ */
+export type Message$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
 /**

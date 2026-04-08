@@ -29,8 +29,8 @@ export type SpaceMinAggregateOutputType = {
   name: string | null
   description: string | null
   icon: string | null
-  isPrivate: boolean | null
-  inviteCode: string | null
+  objective: string | null
+  adminRole: string | null
   createdAt: Date | null
   updatedAt: Date | null
   ownerId: string | null
@@ -41,8 +41,8 @@ export type SpaceMaxAggregateOutputType = {
   name: string | null
   description: string | null
   icon: string | null
-  isPrivate: boolean | null
-  inviteCode: string | null
+  objective: string | null
+  adminRole: string | null
   createdAt: Date | null
   updatedAt: Date | null
   ownerId: string | null
@@ -53,8 +53,8 @@ export type SpaceCountAggregateOutputType = {
   name: number
   description: number
   icon: number
-  isPrivate: number
-  inviteCode: number
+  objective: number
+  adminRole: number
   createdAt: number
   updatedAt: number
   ownerId: number
@@ -67,8 +67,8 @@ export type SpaceMinAggregateInputType = {
   name?: true
   description?: true
   icon?: true
-  isPrivate?: true
-  inviteCode?: true
+  objective?: true
+  adminRole?: true
   createdAt?: true
   updatedAt?: true
   ownerId?: true
@@ -79,8 +79,8 @@ export type SpaceMaxAggregateInputType = {
   name?: true
   description?: true
   icon?: true
-  isPrivate?: true
-  inviteCode?: true
+  objective?: true
+  adminRole?: true
   createdAt?: true
   updatedAt?: true
   ownerId?: true
@@ -91,8 +91,8 @@ export type SpaceCountAggregateInputType = {
   name?: true
   description?: true
   icon?: true
-  isPrivate?: true
-  inviteCode?: true
+  objective?: true
+  adminRole?: true
   createdAt?: true
   updatedAt?: true
   ownerId?: true
@@ -176,8 +176,8 @@ export type SpaceGroupByOutputType = {
   name: string
   description: string | null
   icon: string | null
-  isPrivate: boolean
-  inviteCode: string | null
+  objective: string | null
+  adminRole: string
   createdAt: Date
   updatedAt: Date
   ownerId: string
@@ -209,8 +209,8 @@ export type SpaceWhereInput = {
   name?: Prisma.StringFilter<"Space"> | string
   description?: Prisma.StringNullableFilter<"Space"> | string | null
   icon?: Prisma.StringNullableFilter<"Space"> | string | null
-  isPrivate?: Prisma.BoolFilter<"Space"> | boolean
-  inviteCode?: Prisma.StringNullableFilter<"Space"> | string | null
+  objective?: Prisma.StringNullableFilter<"Space"> | string | null
+  adminRole?: Prisma.StringFilter<"Space"> | string
   createdAt?: Prisma.DateTimeFilter<"Space"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Space"> | Date | string
   ownerId?: Prisma.StringFilter<"Space"> | string
@@ -225,8 +225,8 @@ export type SpaceOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   icon?: Prisma.SortOrderInput | Prisma.SortOrder
-  isPrivate?: Prisma.SortOrder
-  inviteCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  objective?: Prisma.SortOrderInput | Prisma.SortOrder
+  adminRole?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
@@ -238,14 +238,14 @@ export type SpaceOrderByWithRelationInput = {
 
 export type SpaceWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  inviteCode?: string
   AND?: Prisma.SpaceWhereInput | Prisma.SpaceWhereInput[]
   OR?: Prisma.SpaceWhereInput[]
   NOT?: Prisma.SpaceWhereInput | Prisma.SpaceWhereInput[]
   name?: Prisma.StringFilter<"Space"> | string
   description?: Prisma.StringNullableFilter<"Space"> | string | null
   icon?: Prisma.StringNullableFilter<"Space"> | string | null
-  isPrivate?: Prisma.BoolFilter<"Space"> | boolean
+  objective?: Prisma.StringNullableFilter<"Space"> | string | null
+  adminRole?: Prisma.StringFilter<"Space"> | string
   createdAt?: Prisma.DateTimeFilter<"Space"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Space"> | Date | string
   ownerId?: Prisma.StringFilter<"Space"> | string
@@ -253,15 +253,15 @@ export type SpaceWhereUniqueInput = Prisma.AtLeast<{
   members?: Prisma.SpaceMemberListRelationFilter
   channels?: Prisma.ChannelListRelationFilter
   otpInvites?: Prisma.OtpInviteListRelationFilter
-}, "id" | "inviteCode">
+}, "id">
 
 export type SpaceOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   icon?: Prisma.SortOrderInput | Prisma.SortOrder
-  isPrivate?: Prisma.SortOrder
-  inviteCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  objective?: Prisma.SortOrderInput | Prisma.SortOrder
+  adminRole?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
@@ -278,8 +278,8 @@ export type SpaceScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Space"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Space"> | string | null
   icon?: Prisma.StringNullableWithAggregatesFilter<"Space"> | string | null
-  isPrivate?: Prisma.BoolWithAggregatesFilter<"Space"> | boolean
-  inviteCode?: Prisma.StringNullableWithAggregatesFilter<"Space"> | string | null
+  objective?: Prisma.StringNullableWithAggregatesFilter<"Space"> | string | null
+  adminRole?: Prisma.StringWithAggregatesFilter<"Space"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Space"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Space"> | Date | string
   ownerId?: Prisma.StringWithAggregatesFilter<"Space"> | string
@@ -290,8 +290,8 @@ export type SpaceCreateInput = {
   name: string
   description?: string | null
   icon?: string | null
-  isPrivate?: boolean
-  inviteCode?: string | null
+  objective?: string | null
+  adminRole: string
   createdAt?: Date | string
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedSpacesInput
@@ -305,8 +305,8 @@ export type SpaceUncheckedCreateInput = {
   name: string
   description?: string | null
   icon?: string | null
-  isPrivate?: boolean
-  inviteCode?: string | null
+  objective?: string | null
+  adminRole: string
   createdAt?: Date | string
   updatedAt?: Date | string
   ownerId: string
@@ -320,8 +320,8 @@ export type SpaceUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminRole?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedSpacesNestedInput
@@ -335,8 +335,8 @@ export type SpaceUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminRole?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -350,8 +350,8 @@ export type SpaceCreateManyInput = {
   name: string
   description?: string | null
   icon?: string | null
-  isPrivate?: boolean
-  inviteCode?: string | null
+  objective?: string | null
+  adminRole: string
   createdAt?: Date | string
   updatedAt?: Date | string
   ownerId: string
@@ -362,8 +362,8 @@ export type SpaceUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminRole?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -373,8 +373,8 @@ export type SpaceUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminRole?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -395,8 +395,8 @@ export type SpaceCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   icon?: Prisma.SortOrder
-  isPrivate?: Prisma.SortOrder
-  inviteCode?: Prisma.SortOrder
+  objective?: Prisma.SortOrder
+  adminRole?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
@@ -407,8 +407,8 @@ export type SpaceMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   icon?: Prisma.SortOrder
-  isPrivate?: Prisma.SortOrder
-  inviteCode?: Prisma.SortOrder
+  objective?: Prisma.SortOrder
+  adminRole?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
@@ -419,8 +419,8 @@ export type SpaceMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   icon?: Prisma.SortOrder
-  isPrivate?: Prisma.SortOrder
-  inviteCode?: Prisma.SortOrder
+  objective?: Prisma.SortOrder
+  adminRole?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
@@ -520,8 +520,8 @@ export type SpaceCreateWithoutOwnerInput = {
   name: string
   description?: string | null
   icon?: string | null
-  isPrivate?: boolean
-  inviteCode?: string | null
+  objective?: string | null
+  adminRole: string
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.SpaceMemberCreateNestedManyWithoutSpaceInput
@@ -534,8 +534,8 @@ export type SpaceUncheckedCreateWithoutOwnerInput = {
   name: string
   description?: string | null
   icon?: string | null
-  isPrivate?: boolean
-  inviteCode?: string | null
+  objective?: string | null
+  adminRole: string
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.SpaceMemberUncheckedCreateNestedManyWithoutSpaceInput
@@ -577,8 +577,8 @@ export type SpaceScalarWhereInput = {
   name?: Prisma.StringFilter<"Space"> | string
   description?: Prisma.StringNullableFilter<"Space"> | string | null
   icon?: Prisma.StringNullableFilter<"Space"> | string | null
-  isPrivate?: Prisma.BoolFilter<"Space"> | boolean
-  inviteCode?: Prisma.StringNullableFilter<"Space"> | string | null
+  objective?: Prisma.StringNullableFilter<"Space"> | string | null
+  adminRole?: Prisma.StringFilter<"Space"> | string
   createdAt?: Prisma.DateTimeFilter<"Space"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Space"> | Date | string
   ownerId?: Prisma.StringFilter<"Space"> | string
@@ -589,8 +589,8 @@ export type SpaceCreateWithoutMembersInput = {
   name: string
   description?: string | null
   icon?: string | null
-  isPrivate?: boolean
-  inviteCode?: string | null
+  objective?: string | null
+  adminRole: string
   createdAt?: Date | string
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedSpacesInput
@@ -603,8 +603,8 @@ export type SpaceUncheckedCreateWithoutMembersInput = {
   name: string
   description?: string | null
   icon?: string | null
-  isPrivate?: boolean
-  inviteCode?: string | null
+  objective?: string | null
+  adminRole: string
   createdAt?: Date | string
   updatedAt?: Date | string
   ownerId: string
@@ -633,8 +633,8 @@ export type SpaceUpdateWithoutMembersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminRole?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedSpacesNestedInput
@@ -647,8 +647,8 @@ export type SpaceUncheckedUpdateWithoutMembersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminRole?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -661,8 +661,8 @@ export type SpaceCreateWithoutChannelsInput = {
   name: string
   description?: string | null
   icon?: string | null
-  isPrivate?: boolean
-  inviteCode?: string | null
+  objective?: string | null
+  adminRole: string
   createdAt?: Date | string
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedSpacesInput
@@ -675,8 +675,8 @@ export type SpaceUncheckedCreateWithoutChannelsInput = {
   name: string
   description?: string | null
   icon?: string | null
-  isPrivate?: boolean
-  inviteCode?: string | null
+  objective?: string | null
+  adminRole: string
   createdAt?: Date | string
   updatedAt?: Date | string
   ownerId: string
@@ -705,8 +705,8 @@ export type SpaceUpdateWithoutChannelsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminRole?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedSpacesNestedInput
@@ -719,8 +719,8 @@ export type SpaceUncheckedUpdateWithoutChannelsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminRole?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -733,8 +733,8 @@ export type SpaceCreateWithoutOtpInvitesInput = {
   name: string
   description?: string | null
   icon?: string | null
-  isPrivate?: boolean
-  inviteCode?: string | null
+  objective?: string | null
+  adminRole: string
   createdAt?: Date | string
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedSpacesInput
@@ -747,8 +747,8 @@ export type SpaceUncheckedCreateWithoutOtpInvitesInput = {
   name: string
   description?: string | null
   icon?: string | null
-  isPrivate?: boolean
-  inviteCode?: string | null
+  objective?: string | null
+  adminRole: string
   createdAt?: Date | string
   updatedAt?: Date | string
   ownerId: string
@@ -777,8 +777,8 @@ export type SpaceUpdateWithoutOtpInvitesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminRole?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedSpacesNestedInput
@@ -791,8 +791,8 @@ export type SpaceUncheckedUpdateWithoutOtpInvitesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminRole?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -805,8 +805,8 @@ export type SpaceCreateManyOwnerInput = {
   name: string
   description?: string | null
   icon?: string | null
-  isPrivate?: boolean
-  inviteCode?: string | null
+  objective?: string | null
+  adminRole: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -816,8 +816,8 @@ export type SpaceUpdateWithoutOwnerInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminRole?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.SpaceMemberUpdateManyWithoutSpaceNestedInput
@@ -830,8 +830,8 @@ export type SpaceUncheckedUpdateWithoutOwnerInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminRole?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.SpaceMemberUncheckedUpdateManyWithoutSpaceNestedInput
@@ -844,8 +844,8 @@ export type SpaceUncheckedUpdateManyWithoutOwnerInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminRole?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -904,8 +904,8 @@ export type SpaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   name?: boolean
   description?: boolean
   icon?: boolean
-  isPrivate?: boolean
-  inviteCode?: boolean
+  objective?: boolean
+  adminRole?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   ownerId?: boolean
@@ -921,8 +921,8 @@ export type SpaceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   name?: boolean
   description?: boolean
   icon?: boolean
-  isPrivate?: boolean
-  inviteCode?: boolean
+  objective?: boolean
+  adminRole?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   ownerId?: boolean
@@ -934,8 +934,8 @@ export type SpaceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   name?: boolean
   description?: boolean
   icon?: boolean
-  isPrivate?: boolean
-  inviteCode?: boolean
+  objective?: boolean
+  adminRole?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   ownerId?: boolean
@@ -947,14 +947,14 @@ export type SpaceSelectScalar = {
   name?: boolean
   description?: boolean
   icon?: boolean
-  isPrivate?: boolean
-  inviteCode?: boolean
+  objective?: boolean
+  adminRole?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   ownerId?: boolean
 }
 
-export type SpaceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "icon" | "isPrivate" | "inviteCode" | "createdAt" | "updatedAt" | "ownerId", ExtArgs["result"]["space"]>
+export type SpaceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "icon" | "objective" | "adminRole" | "createdAt" | "updatedAt" | "ownerId", ExtArgs["result"]["space"]>
 export type SpaceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   members?: boolean | Prisma.Space$membersArgs<ExtArgs>
@@ -982,8 +982,8 @@ export type $SpacePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     name: string
     description: string | null
     icon: string | null
-    isPrivate: boolean
-    inviteCode: string | null
+    objective: string | null
+    adminRole: string
     createdAt: Date
     updatedAt: Date
     ownerId: string
@@ -1418,8 +1418,8 @@ export interface SpaceFieldRefs {
   readonly name: Prisma.FieldRef<"Space", 'String'>
   readonly description: Prisma.FieldRef<"Space", 'String'>
   readonly icon: Prisma.FieldRef<"Space", 'String'>
-  readonly isPrivate: Prisma.FieldRef<"Space", 'Boolean'>
-  readonly inviteCode: Prisma.FieldRef<"Space", 'String'>
+  readonly objective: Prisma.FieldRef<"Space", 'String'>
+  readonly adminRole: Prisma.FieldRef<"Space", 'String'>
   readonly createdAt: Prisma.FieldRef<"Space", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Space", 'DateTime'>
   readonly ownerId: Prisma.FieldRef<"Space", 'String'>

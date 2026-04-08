@@ -391,9 +391,11 @@ export const ModelName = {
   MeetingAttendee: 'MeetingAttendee',
   Space: 'Space',
   SpaceMember: 'SpaceMember',
+  Warning: 'Warning',
   Channel: 'Channel',
   Message: 'Message',
-  OtpInvite: 'OtpInvite'
+  OtpInvite: 'OtpInvite',
+  Notification: 'Notification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -409,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "recording" | "room" | "meeting" | "meetingAttendee" | "space" | "spaceMember" | "channel" | "message" | "otpInvite"
+    modelProps: "user" | "recording" | "room" | "meeting" | "meetingAttendee" | "space" | "spaceMember" | "warning" | "channel" | "message" | "otpInvite" | "notification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -931,6 +933,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Warning: {
+      payload: Prisma.$WarningPayload<ExtArgs>
+      fields: Prisma.WarningFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WarningFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WarningPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WarningFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WarningPayload>
+        }
+        findFirst: {
+          args: Prisma.WarningFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WarningPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WarningFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WarningPayload>
+        }
+        findMany: {
+          args: Prisma.WarningFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WarningPayload>[]
+        }
+        create: {
+          args: Prisma.WarningCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WarningPayload>
+        }
+        createMany: {
+          args: Prisma.WarningCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WarningCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WarningPayload>[]
+        }
+        delete: {
+          args: Prisma.WarningDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WarningPayload>
+        }
+        update: {
+          args: Prisma.WarningUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WarningPayload>
+        }
+        deleteMany: {
+          args: Prisma.WarningDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WarningUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WarningUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WarningPayload>[]
+        }
+        upsert: {
+          args: Prisma.WarningUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WarningPayload>
+        }
+        aggregate: {
+          args: Prisma.WarningAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWarning>
+        }
+        groupBy: {
+          args: Prisma.WarningGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WarningGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WarningCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WarningCountAggregateOutputType> | number
+        }
+      }
+    }
     Channel: {
       payload: Prisma.$ChannelPayload<ExtArgs>
       fields: Prisma.ChannelFieldRefs
@@ -1153,6 +1229,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Notification: {
+      payload: Prisma.$NotificationPayload<ExtArgs>
+      fields: Prisma.NotificationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NotificationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        findFirst: {
+          args: Prisma.NotificationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        findMany: {
+          args: Prisma.NotificationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+        }
+        create: {
+          args: Prisma.NotificationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        createMany: {
+          args: Prisma.NotificationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NotificationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+        }
+        delete: {
+          args: Prisma.NotificationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        update: {
+          args: Prisma.NotificationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        deleteMany: {
+          args: Prisma.NotificationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NotificationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NotificationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+        }
+        upsert: {
+          args: Prisma.NotificationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        aggregate: {
+          args: Prisma.NotificationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNotification>
+        }
+        groupBy: {
+          args: Prisma.NotificationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NotificationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NotificationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NotificationCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1231,6 +1381,7 @@ export const RoomScalarFieldEnum = {
   capacity: 'capacity',
   location: 'location',
   description: 'description',
+  color: 'color',
   isActive: 'isActive',
   createdAt: 'createdAt'
 } as const
@@ -1272,8 +1423,8 @@ export const SpaceScalarFieldEnum = {
   name: 'name',
   description: 'description',
   icon: 'icon',
-  isPrivate: 'isPrivate',
-  inviteCode: 'inviteCode',
+  objective: 'objective',
+  adminRole: 'adminRole',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   ownerId: 'ownerId'
@@ -1284,17 +1435,27 @@ export type SpaceScalarFieldEnum = (typeof SpaceScalarFieldEnum)[keyof typeof Sp
 
 export const SpaceMemberScalarFieldEnum = {
   id: 'id',
-  status: 'status',
   role: 'role',
+  status: 'status',
   joinedAt: 'joinedAt',
   updatedAt: 'updatedAt',
   blockedUntil: 'blockedUntil',
-  banReason: 'banReason',
   spaceId: 'spaceId',
   userId: 'userId'
 } as const
 
 export type SpaceMemberScalarFieldEnum = (typeof SpaceMemberScalarFieldEnum)[keyof typeof SpaceMemberScalarFieldEnum]
+
+
+export const WarningScalarFieldEnum = {
+  id: 'id',
+  reason: 'reason',
+  createdAt: 'createdAt',
+  memberId: 'memberId',
+  userId: 'userId'
+} as const
+
+export type WarningScalarFieldEnum = (typeof WarningScalarFieldEnum)[keyof typeof WarningScalarFieldEnum]
 
 
 export const ChannelScalarFieldEnum = {
@@ -1316,6 +1477,8 @@ export const MessageScalarFieldEnum = {
   content: 'content',
   type: 'type',
   fileUrl: 'fileUrl',
+  isPinned: 'isPinned',
+  pinnedAt: 'pinnedAt',
   editedAt: 'editedAt',
   createdAt: 'createdAt',
   channelId: 'channelId',
@@ -1338,6 +1501,19 @@ export const OtpInviteScalarFieldEnum = {
 } as const
 
 export type OtpInviteScalarFieldEnum = (typeof OtpInviteScalarFieldEnum)[keyof typeof OtpInviteScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  read: 'read',
+  createdAt: 'createdAt',
+  memberId: 'memberId',
+  channelId: 'channelId',
+  messageId: 'messageId'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1381,20 +1557,6 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'String[]'
  */
 export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
-    
-
-
-/**
- * Reference to a field of type 'Role'
- */
-export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
-    
-
-
-/**
- * Reference to a field of type 'Role[]'
- */
-export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
     
 
 
@@ -1448,6 +1610,20 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'SpaceRole'
+ */
+export type EnumSpaceRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SpaceRole'>
+    
+
+
+/**
+ * Reference to a field of type 'SpaceRole[]'
+ */
+export type ListEnumSpaceRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SpaceRole[]'>
+    
+
+
+/**
  * Reference to a field of type 'MemberStatus'
  */
 export type EnumMemberStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MemberStatus'>
@@ -1472,6 +1648,20 @@ export type EnumMessageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'MessageType[]'
  */
 export type ListEnumMessageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NotificationType'
+ */
+export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType'>
+    
+
+
+/**
+ * Reference to a field of type 'NotificationType[]'
+ */
+export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
     
 
 
@@ -1590,9 +1780,11 @@ export type GlobalOmitConfig = {
   meetingAttendee?: Prisma.MeetingAttendeeOmit
   space?: Prisma.SpaceOmit
   spaceMember?: Prisma.SpaceMemberOmit
+  warning?: Prisma.WarningOmit
   channel?: Prisma.ChannelOmit
   message?: Prisma.MessageOmit
   otpInvite?: Prisma.OtpInviteOmit
+  notification?: Prisma.NotificationOmit
 }
 
 /* Types for Logging */

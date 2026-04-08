@@ -17,6 +17,8 @@ export default function RoomPage() {
   );
 }
 
+import { getRooms, getMeetings } from './actions';
+
 async function RoomContent() {
   const supabase = await createClient();
   const {
@@ -36,6 +38,42 @@ async function RoomContent() {
   }
 
   const userEmail = user.email || "utilisateur@afriland.com";
+  const userId = user.id;
 
-  return <RoomClient userName={userName} avatarUrl={avatarUrl} userEmail={userEmail} />;
+  const initialRooms = await getRooms();
+  const rawMeetings = await getMeetings();
+
+  const initialMeetings = rawMeetings.map((m) => {
+    const startDate = new Date(m.startTime);
+    const endDate = new Date(m.endTime);
+    
+    const tzOffset = startDate.getTimezoneOffset() * 60000;
+    const localDateStr = new Date(startDate.getTime() - tzOffset).toISOString().split('T')[0];
+
+    const startHour = startDate.getHours() + startDate.getMinutes() / 60;
+    const endHour = endDate.getHours() + endDate.getMinutes() / 60;
+    const durationHours = endHour - startHour;
+
+    return {
+      id: m.id,
+      title: m.title,
+      roomId: m.roomId,
+      date: localDateStr,
+      startHour,
+      durationHours,
+      attendees: m.attendees.length,
+      color: m.color || "#ef4b56",
+    };
+  });
+
+  return (
+    <RoomClient
+      userName={userName}
+      avatarUrl={avatarUrl}
+      userEmail={userEmail}
+      userId={userId}
+      initialRooms={initialRooms}
+      initialMeetings={initialMeetings}
+    />
+  );
 }

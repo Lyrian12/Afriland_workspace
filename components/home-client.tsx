@@ -30,7 +30,7 @@ export function HomeClient() {
         transition={{ delay: 1, duration: 1 }}
         className="w-full max-w-[1200px] flex items-center justify-between mt-20 pt-8 border-t border-black/10 text-xs text-gray-500"
       >
-        <p>© 2026 Afriland Workspace. Tous droits réservés.</p>
+        <p>© 2025 Afriland Workspace. Tous droits réservés.</p>
         <ThemeSwitcher />
       </motion.footer>
     </div>

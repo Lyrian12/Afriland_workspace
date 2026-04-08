@@ -26,36 +26,33 @@ export type AggregateSpaceMember = {
 
 export type SpaceMemberMinAggregateOutputType = {
   id: string | null
+  role: $Enums.SpaceRole | null
   status: $Enums.MemberStatus | null
-  role: $Enums.Role | null
   joinedAt: Date | null
   updatedAt: Date | null
   blockedUntil: Date | null
-  banReason: string | null
   spaceId: string | null
   userId: string | null
 }
 
 export type SpaceMemberMaxAggregateOutputType = {
   id: string | null
+  role: $Enums.SpaceRole | null
   status: $Enums.MemberStatus | null
-  role: $Enums.Role | null
   joinedAt: Date | null
   updatedAt: Date | null
   blockedUntil: Date | null
-  banReason: string | null
   spaceId: string | null
   userId: string | null
 }
 
 export type SpaceMemberCountAggregateOutputType = {
   id: number
-  status: number
   role: number
+  status: number
   joinedAt: number
   updatedAt: number
   blockedUntil: number
-  banReason: number
   spaceId: number
   userId: number
   _all: number
@@ -64,36 +61,33 @@ export type SpaceMemberCountAggregateOutputType = {
 
 export type SpaceMemberMinAggregateInputType = {
   id?: true
-  status?: true
   role?: true
+  status?: true
   joinedAt?: true
   updatedAt?: true
   blockedUntil?: true
-  banReason?: true
   spaceId?: true
   userId?: true
 }
 
 export type SpaceMemberMaxAggregateInputType = {
   id?: true
-  status?: true
   role?: true
+  status?: true
   joinedAt?: true
   updatedAt?: true
   blockedUntil?: true
-  banReason?: true
   spaceId?: true
   userId?: true
 }
 
 export type SpaceMemberCountAggregateInputType = {
   id?: true
-  status?: true
   role?: true
+  status?: true
   joinedAt?: true
   updatedAt?: true
   blockedUntil?: true
-  banReason?: true
   spaceId?: true
   userId?: true
   _all?: true
@@ -173,12 +167,11 @@ export type SpaceMemberGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 
 export type SpaceMemberGroupByOutputType = {
   id: string
+  role: $Enums.SpaceRole
   status: $Enums.MemberStatus
-  role: $Enums.Role
   joinedAt: Date
   updatedAt: Date
   blockedUntil: Date | null
-  banReason: string | null
   spaceId: string
   userId: string
   _count: SpaceMemberCountAggregateOutputType | null
@@ -206,30 +199,32 @@ export type SpaceMemberWhereInput = {
   OR?: Prisma.SpaceMemberWhereInput[]
   NOT?: Prisma.SpaceMemberWhereInput | Prisma.SpaceMemberWhereInput[]
   id?: Prisma.StringFilter<"SpaceMember"> | string
+  role?: Prisma.EnumSpaceRoleFilter<"SpaceMember"> | $Enums.SpaceRole
   status?: Prisma.EnumMemberStatusFilter<"SpaceMember"> | $Enums.MemberStatus
-  role?: Prisma.EnumRoleFilter<"SpaceMember"> | $Enums.Role
   joinedAt?: Prisma.DateTimeFilter<"SpaceMember"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SpaceMember"> | Date | string
   blockedUntil?: Prisma.DateTimeNullableFilter<"SpaceMember"> | Date | string | null
-  banReason?: Prisma.StringNullableFilter<"SpaceMember"> | string | null
   spaceId?: Prisma.StringFilter<"SpaceMember"> | string
   userId?: Prisma.StringFilter<"SpaceMember"> | string
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  warnings?: Prisma.WarningListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }
 
 export type SpaceMemberOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   blockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
-  banReason?: Prisma.SortOrderInput | Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   space?: Prisma.SpaceOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
+  warnings?: Prisma.WarningOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
 }
 
 export type SpaceMemberWhereUniqueInput = Prisma.AtLeast<{
@@ -238,26 +233,26 @@ export type SpaceMemberWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.SpaceMemberWhereInput | Prisma.SpaceMemberWhereInput[]
   OR?: Prisma.SpaceMemberWhereInput[]
   NOT?: Prisma.SpaceMemberWhereInput | Prisma.SpaceMemberWhereInput[]
+  role?: Prisma.EnumSpaceRoleFilter<"SpaceMember"> | $Enums.SpaceRole
   status?: Prisma.EnumMemberStatusFilter<"SpaceMember"> | $Enums.MemberStatus
-  role?: Prisma.EnumRoleFilter<"SpaceMember"> | $Enums.Role
   joinedAt?: Prisma.DateTimeFilter<"SpaceMember"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SpaceMember"> | Date | string
   blockedUntil?: Prisma.DateTimeNullableFilter<"SpaceMember"> | Date | string | null
-  banReason?: Prisma.StringNullableFilter<"SpaceMember"> | string | null
   spaceId?: Prisma.StringFilter<"SpaceMember"> | string
   userId?: Prisma.StringFilter<"SpaceMember"> | string
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  warnings?: Prisma.WarningListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }, "id" | "spaceId_userId">
 
 export type SpaceMemberOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   blockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
-  banReason?: Prisma.SortOrderInput | Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   _count?: Prisma.SpaceMemberCountOrderByAggregateInput
@@ -270,94 +265,94 @@ export type SpaceMemberScalarWhereWithAggregatesInput = {
   OR?: Prisma.SpaceMemberScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SpaceMemberScalarWhereWithAggregatesInput | Prisma.SpaceMemberScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"SpaceMember"> | string
+  role?: Prisma.EnumSpaceRoleWithAggregatesFilter<"SpaceMember"> | $Enums.SpaceRole
   status?: Prisma.EnumMemberStatusWithAggregatesFilter<"SpaceMember"> | $Enums.MemberStatus
-  role?: Prisma.EnumRoleWithAggregatesFilter<"SpaceMember"> | $Enums.Role
   joinedAt?: Prisma.DateTimeWithAggregatesFilter<"SpaceMember"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SpaceMember"> | Date | string
   blockedUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"SpaceMember"> | Date | string | null
-  banReason?: Prisma.StringNullableWithAggregatesFilter<"SpaceMember"> | string | null
   spaceId?: Prisma.StringWithAggregatesFilter<"SpaceMember"> | string
   userId?: Prisma.StringWithAggregatesFilter<"SpaceMember"> | string
 }
 
 export type SpaceMemberCreateInput = {
   id?: string
+  role?: $Enums.SpaceRole
   status?: $Enums.MemberStatus
-  role?: $Enums.Role
   joinedAt?: Date | string
   updatedAt?: Date | string
   blockedUntil?: Date | string | null
-  banReason?: string | null
   space: Prisma.SpaceCreateNestedOneWithoutMembersInput
   user: Prisma.UserCreateNestedOneWithoutSpaceMembershipsInput
+  warnings?: Prisma.WarningCreateNestedManyWithoutMemberInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMemberInput
 }
 
 export type SpaceMemberUncheckedCreateInput = {
   id?: string
+  role?: $Enums.SpaceRole
   status?: $Enums.MemberStatus
-  role?: $Enums.Role
   joinedAt?: Date | string
   updatedAt?: Date | string
   blockedUntil?: Date | string | null
-  banReason?: string | null
   spaceId: string
   userId: string
+  warnings?: Prisma.WarningUncheckedCreateNestedManyWithoutMemberInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMemberInput
 }
 
 export type SpaceMemberUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSpaceRoleFieldUpdateOperationsInput | $Enums.SpaceRole
   status?: Prisma.EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   space?: Prisma.SpaceUpdateOneRequiredWithoutMembersNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutSpaceMembershipsNestedInput
+  warnings?: Prisma.WarningUpdateManyWithoutMemberNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMemberNestedInput
 }
 
 export type SpaceMemberUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSpaceRoleFieldUpdateOperationsInput | $Enums.SpaceRole
   status?: Prisma.EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  warnings?: Prisma.WarningUncheckedUpdateManyWithoutMemberNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMemberNestedInput
 }
 
 export type SpaceMemberCreateManyInput = {
   id?: string
+  role?: $Enums.SpaceRole
   status?: $Enums.MemberStatus
-  role?: $Enums.Role
   joinedAt?: Date | string
   updatedAt?: Date | string
   blockedUntil?: Date | string | null
-  banReason?: string | null
   spaceId: string
   userId: string
 }
 
 export type SpaceMemberUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSpaceRoleFieldUpdateOperationsInput | $Enums.SpaceRole
   status?: Prisma.EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SpaceMemberUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSpaceRoleFieldUpdateOperationsInput | $Enums.SpaceRole
   status?: Prisma.EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -379,38 +374,40 @@ export type SpaceMemberSpaceIdUserIdCompoundUniqueInput = {
 
 export type SpaceMemberCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   blockedUntil?: Prisma.SortOrder
-  banReason?: Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
 export type SpaceMemberMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   blockedUntil?: Prisma.SortOrder
-  banReason?: Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
 export type SpaceMemberMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   blockedUntil?: Prisma.SortOrder
-  banReason?: Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+}
+
+export type SpaceMemberScalarRelationFilter = {
+  is?: Prisma.SpaceMemberWhereInput
+  isNot?: Prisma.SpaceMemberWhereInput
 }
 
 export type SpaceMemberCreateNestedManyWithoutUserInput = {
@@ -497,6 +494,10 @@ export type SpaceMemberUncheckedUpdateManyWithoutSpaceNestedInput = {
   deleteMany?: Prisma.SpaceMemberScalarWhereInput | Prisma.SpaceMemberScalarWhereInput[]
 }
 
+export type EnumSpaceRoleFieldUpdateOperationsInput = {
+  set?: $Enums.SpaceRole
+}
+
 export type EnumMemberStatusFieldUpdateOperationsInput = {
   set?: $Enums.MemberStatus
 }
@@ -505,26 +506,56 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
+export type SpaceMemberCreateNestedOneWithoutWarningsInput = {
+  create?: Prisma.XOR<Prisma.SpaceMemberCreateWithoutWarningsInput, Prisma.SpaceMemberUncheckedCreateWithoutWarningsInput>
+  connectOrCreate?: Prisma.SpaceMemberCreateOrConnectWithoutWarningsInput
+  connect?: Prisma.SpaceMemberWhereUniqueInput
+}
+
+export type SpaceMemberUpdateOneRequiredWithoutWarningsNestedInput = {
+  create?: Prisma.XOR<Prisma.SpaceMemberCreateWithoutWarningsInput, Prisma.SpaceMemberUncheckedCreateWithoutWarningsInput>
+  connectOrCreate?: Prisma.SpaceMemberCreateOrConnectWithoutWarningsInput
+  upsert?: Prisma.SpaceMemberUpsertWithoutWarningsInput
+  connect?: Prisma.SpaceMemberWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceMemberUpdateToOneWithWhereWithoutWarningsInput, Prisma.SpaceMemberUpdateWithoutWarningsInput>, Prisma.SpaceMemberUncheckedUpdateWithoutWarningsInput>
+}
+
+export type SpaceMemberCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.SpaceMemberCreateWithoutNotificationsInput, Prisma.SpaceMemberUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.SpaceMemberCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.SpaceMemberWhereUniqueInput
+}
+
+export type SpaceMemberUpdateOneRequiredWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.SpaceMemberCreateWithoutNotificationsInput, Prisma.SpaceMemberUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.SpaceMemberCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.SpaceMemberUpsertWithoutNotificationsInput
+  connect?: Prisma.SpaceMemberWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceMemberUpdateToOneWithWhereWithoutNotificationsInput, Prisma.SpaceMemberUpdateWithoutNotificationsInput>, Prisma.SpaceMemberUncheckedUpdateWithoutNotificationsInput>
+}
+
 export type SpaceMemberCreateWithoutUserInput = {
   id?: string
+  role?: $Enums.SpaceRole
   status?: $Enums.MemberStatus
-  role?: $Enums.Role
   joinedAt?: Date | string
   updatedAt?: Date | string
   blockedUntil?: Date | string | null
-  banReason?: string | null
   space: Prisma.SpaceCreateNestedOneWithoutMembersInput
+  warnings?: Prisma.WarningCreateNestedManyWithoutMemberInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMemberInput
 }
 
 export type SpaceMemberUncheckedCreateWithoutUserInput = {
   id?: string
+  role?: $Enums.SpaceRole
   status?: $Enums.MemberStatus
-  role?: $Enums.Role
   joinedAt?: Date | string
   updatedAt?: Date | string
   blockedUntil?: Date | string | null
-  banReason?: string | null
   spaceId: string
+  warnings?: Prisma.WarningUncheckedCreateNestedManyWithoutMemberInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMemberInput
 }
 
 export type SpaceMemberCreateOrConnectWithoutUserInput = {
@@ -558,36 +589,37 @@ export type SpaceMemberScalarWhereInput = {
   OR?: Prisma.SpaceMemberScalarWhereInput[]
   NOT?: Prisma.SpaceMemberScalarWhereInput | Prisma.SpaceMemberScalarWhereInput[]
   id?: Prisma.StringFilter<"SpaceMember"> | string
+  role?: Prisma.EnumSpaceRoleFilter<"SpaceMember"> | $Enums.SpaceRole
   status?: Prisma.EnumMemberStatusFilter<"SpaceMember"> | $Enums.MemberStatus
-  role?: Prisma.EnumRoleFilter<"SpaceMember"> | $Enums.Role
   joinedAt?: Prisma.DateTimeFilter<"SpaceMember"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SpaceMember"> | Date | string
   blockedUntil?: Prisma.DateTimeNullableFilter<"SpaceMember"> | Date | string | null
-  banReason?: Prisma.StringNullableFilter<"SpaceMember"> | string | null
   spaceId?: Prisma.StringFilter<"SpaceMember"> | string
   userId?: Prisma.StringFilter<"SpaceMember"> | string
 }
 
 export type SpaceMemberCreateWithoutSpaceInput = {
   id?: string
+  role?: $Enums.SpaceRole
   status?: $Enums.MemberStatus
-  role?: $Enums.Role
   joinedAt?: Date | string
   updatedAt?: Date | string
   blockedUntil?: Date | string | null
-  banReason?: string | null
   user: Prisma.UserCreateNestedOneWithoutSpaceMembershipsInput
+  warnings?: Prisma.WarningCreateNestedManyWithoutMemberInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMemberInput
 }
 
 export type SpaceMemberUncheckedCreateWithoutSpaceInput = {
   id?: string
+  role?: $Enums.SpaceRole
   status?: $Enums.MemberStatus
-  role?: $Enums.Role
   joinedAt?: Date | string
   updatedAt?: Date | string
   blockedUntil?: Date | string | null
-  banReason?: string | null
   userId: string
+  warnings?: Prisma.WarningUncheckedCreateNestedManyWithoutMemberInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMemberInput
 }
 
 export type SpaceMemberCreateOrConnectWithoutSpaceInput = {
@@ -616,118 +648,285 @@ export type SpaceMemberUpdateManyWithWhereWithoutSpaceInput = {
   data: Prisma.XOR<Prisma.SpaceMemberUpdateManyMutationInput, Prisma.SpaceMemberUncheckedUpdateManyWithoutSpaceInput>
 }
 
-export type SpaceMemberCreateManyUserInput = {
+export type SpaceMemberCreateWithoutWarningsInput = {
   id?: string
+  role?: $Enums.SpaceRole
   status?: $Enums.MemberStatus
-  role?: $Enums.Role
   joinedAt?: Date | string
   updatedAt?: Date | string
   blockedUntil?: Date | string | null
-  banReason?: string | null
+  space: Prisma.SpaceCreateNestedOneWithoutMembersInput
+  user: Prisma.UserCreateNestedOneWithoutSpaceMembershipsInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMemberInput
+}
+
+export type SpaceMemberUncheckedCreateWithoutWarningsInput = {
+  id?: string
+  role?: $Enums.SpaceRole
+  status?: $Enums.MemberStatus
+  joinedAt?: Date | string
+  updatedAt?: Date | string
+  blockedUntil?: Date | string | null
+  spaceId: string
+  userId: string
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMemberInput
+}
+
+export type SpaceMemberCreateOrConnectWithoutWarningsInput = {
+  where: Prisma.SpaceMemberWhereUniqueInput
+  create: Prisma.XOR<Prisma.SpaceMemberCreateWithoutWarningsInput, Prisma.SpaceMemberUncheckedCreateWithoutWarningsInput>
+}
+
+export type SpaceMemberUpsertWithoutWarningsInput = {
+  update: Prisma.XOR<Prisma.SpaceMemberUpdateWithoutWarningsInput, Prisma.SpaceMemberUncheckedUpdateWithoutWarningsInput>
+  create: Prisma.XOR<Prisma.SpaceMemberCreateWithoutWarningsInput, Prisma.SpaceMemberUncheckedCreateWithoutWarningsInput>
+  where?: Prisma.SpaceMemberWhereInput
+}
+
+export type SpaceMemberUpdateToOneWithWhereWithoutWarningsInput = {
+  where?: Prisma.SpaceMemberWhereInput
+  data: Prisma.XOR<Prisma.SpaceMemberUpdateWithoutWarningsInput, Prisma.SpaceMemberUncheckedUpdateWithoutWarningsInput>
+}
+
+export type SpaceMemberUpdateWithoutWarningsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSpaceRoleFieldUpdateOperationsInput | $Enums.SpaceRole
+  status?: Prisma.EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  blockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  space?: Prisma.SpaceUpdateOneRequiredWithoutMembersNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSpaceMembershipsNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMemberNestedInput
+}
+
+export type SpaceMemberUncheckedUpdateWithoutWarningsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSpaceRoleFieldUpdateOperationsInput | $Enums.SpaceRole
+  status?: Prisma.EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  blockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMemberNestedInput
+}
+
+export type SpaceMemberCreateWithoutNotificationsInput = {
+  id?: string
+  role?: $Enums.SpaceRole
+  status?: $Enums.MemberStatus
+  joinedAt?: Date | string
+  updatedAt?: Date | string
+  blockedUntil?: Date | string | null
+  space: Prisma.SpaceCreateNestedOneWithoutMembersInput
+  user: Prisma.UserCreateNestedOneWithoutSpaceMembershipsInput
+  warnings?: Prisma.WarningCreateNestedManyWithoutMemberInput
+}
+
+export type SpaceMemberUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  role?: $Enums.SpaceRole
+  status?: $Enums.MemberStatus
+  joinedAt?: Date | string
+  updatedAt?: Date | string
+  blockedUntil?: Date | string | null
+  spaceId: string
+  userId: string
+  warnings?: Prisma.WarningUncheckedCreateNestedManyWithoutMemberInput
+}
+
+export type SpaceMemberCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.SpaceMemberWhereUniqueInput
+  create: Prisma.XOR<Prisma.SpaceMemberCreateWithoutNotificationsInput, Prisma.SpaceMemberUncheckedCreateWithoutNotificationsInput>
+}
+
+export type SpaceMemberUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.SpaceMemberUpdateWithoutNotificationsInput, Prisma.SpaceMemberUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.SpaceMemberCreateWithoutNotificationsInput, Prisma.SpaceMemberUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.SpaceMemberWhereInput
+}
+
+export type SpaceMemberUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.SpaceMemberWhereInput
+  data: Prisma.XOR<Prisma.SpaceMemberUpdateWithoutNotificationsInput, Prisma.SpaceMemberUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type SpaceMemberUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSpaceRoleFieldUpdateOperationsInput | $Enums.SpaceRole
+  status?: Prisma.EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  blockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  space?: Prisma.SpaceUpdateOneRequiredWithoutMembersNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSpaceMembershipsNestedInput
+  warnings?: Prisma.WarningUpdateManyWithoutMemberNestedInput
+}
+
+export type SpaceMemberUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSpaceRoleFieldUpdateOperationsInput | $Enums.SpaceRole
+  status?: Prisma.EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  blockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  warnings?: Prisma.WarningUncheckedUpdateManyWithoutMemberNestedInput
+}
+
+export type SpaceMemberCreateManyUserInput = {
+  id?: string
+  role?: $Enums.SpaceRole
+  status?: $Enums.MemberStatus
+  joinedAt?: Date | string
+  updatedAt?: Date | string
+  blockedUntil?: Date | string | null
   spaceId: string
 }
 
 export type SpaceMemberUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSpaceRoleFieldUpdateOperationsInput | $Enums.SpaceRole
   status?: Prisma.EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   space?: Prisma.SpaceUpdateOneRequiredWithoutMembersNestedInput
+  warnings?: Prisma.WarningUpdateManyWithoutMemberNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMemberNestedInput
 }
 
 export type SpaceMemberUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSpaceRoleFieldUpdateOperationsInput | $Enums.SpaceRole
   status?: Prisma.EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  warnings?: Prisma.WarningUncheckedUpdateManyWithoutMemberNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMemberNestedInput
 }
 
 export type SpaceMemberUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSpaceRoleFieldUpdateOperationsInput | $Enums.SpaceRole
   status?: Prisma.EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type SpaceMemberCreateManySpaceInput = {
   id?: string
+  role?: $Enums.SpaceRole
   status?: $Enums.MemberStatus
-  role?: $Enums.Role
   joinedAt?: Date | string
   updatedAt?: Date | string
   blockedUntil?: Date | string | null
-  banReason?: string | null
   userId: string
 }
 
 export type SpaceMemberUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSpaceRoleFieldUpdateOperationsInput | $Enums.SpaceRole
   status?: Prisma.EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutSpaceMembershipsNestedInput
+  warnings?: Prisma.WarningUpdateManyWithoutMemberNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMemberNestedInput
 }
 
 export type SpaceMemberUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSpaceRoleFieldUpdateOperationsInput | $Enums.SpaceRole
   status?: Prisma.EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  warnings?: Prisma.WarningUncheckedUpdateManyWithoutMemberNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMemberNestedInput
 }
 
 export type SpaceMemberUncheckedUpdateManyWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSpaceRoleFieldUpdateOperationsInput | $Enums.SpaceRole
   status?: Prisma.EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
+/**
+ * Count Type SpaceMemberCountOutputType
+ */
+
+export type SpaceMemberCountOutputType = {
+  warnings: number
+  notifications: number
+}
+
+export type SpaceMemberCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  warnings?: boolean | SpaceMemberCountOutputTypeCountWarningsArgs
+  notifications?: boolean | SpaceMemberCountOutputTypeCountNotificationsArgs
+}
+
+/**
+ * SpaceMemberCountOutputType without action
+ */
+export type SpaceMemberCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SpaceMemberCountOutputType
+   */
+  select?: Prisma.SpaceMemberCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * SpaceMemberCountOutputType without action
+ */
+export type SpaceMemberCountOutputTypeCountWarningsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WarningWhereInput
+}
+
+/**
+ * SpaceMemberCountOutputType without action
+ */
+export type SpaceMemberCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
 
 export type SpaceMemberSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  status?: boolean
   role?: boolean
+  status?: boolean
   joinedAt?: boolean
   updatedAt?: boolean
   blockedUntil?: boolean
-  banReason?: boolean
   spaceId?: boolean
   userId?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  warnings?: boolean | Prisma.SpaceMember$warningsArgs<ExtArgs>
+  notifications?: boolean | Prisma.SpaceMember$notificationsArgs<ExtArgs>
+  _count?: boolean | Prisma.SpaceMemberCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["spaceMember"]>
 
 export type SpaceMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  status?: boolean
   role?: boolean
+  status?: boolean
   joinedAt?: boolean
   updatedAt?: boolean
   blockedUntil?: boolean
-  banReason?: boolean
   spaceId?: boolean
   userId?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -736,12 +935,11 @@ export type SpaceMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
 
 export type SpaceMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  status?: boolean
   role?: boolean
+  status?: boolean
   joinedAt?: boolean
   updatedAt?: boolean
   blockedUntil?: boolean
-  banReason?: boolean
   spaceId?: boolean
   userId?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -750,20 +948,22 @@ export type SpaceMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
 
 export type SpaceMemberSelectScalar = {
   id?: boolean
-  status?: boolean
   role?: boolean
+  status?: boolean
   joinedAt?: boolean
   updatedAt?: boolean
   blockedUntil?: boolean
-  banReason?: boolean
   spaceId?: boolean
   userId?: boolean
 }
 
-export type SpaceMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "role" | "joinedAt" | "updatedAt" | "blockedUntil" | "banReason" | "spaceId" | "userId", ExtArgs["result"]["spaceMember"]>
+export type SpaceMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "role" | "status" | "joinedAt" | "updatedAt" | "blockedUntil" | "spaceId" | "userId", ExtArgs["result"]["spaceMember"]>
 export type SpaceMemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  warnings?: boolean | Prisma.SpaceMember$warningsArgs<ExtArgs>
+  notifications?: boolean | Prisma.SpaceMember$notificationsArgs<ExtArgs>
+  _count?: boolean | Prisma.SpaceMemberCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SpaceMemberIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -779,15 +979,16 @@ export type $SpaceMemberPayload<ExtArgs extends runtime.Types.Extensions.Interna
   objects: {
     space: Prisma.$SpacePayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
+    warnings: Prisma.$WarningPayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    role: $Enums.SpaceRole
     status: $Enums.MemberStatus
-    role: $Enums.Role
     joinedAt: Date
     updatedAt: Date
     blockedUntil: Date | null
-    banReason: string | null
     spaceId: string
     userId: string
   }, ExtArgs["result"]["spaceMember"]>
@@ -1186,6 +1387,8 @@ export interface Prisma__SpaceMemberClient<T, Null = never, ExtArgs extends runt
   readonly [Symbol.toStringTag]: "PrismaPromise"
   space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  warnings<T extends Prisma.SpaceMember$warningsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceMember$warningsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WarningPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.SpaceMember$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceMember$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1216,12 +1419,11 @@ export interface Prisma__SpaceMemberClient<T, Null = never, ExtArgs extends runt
  */
 export interface SpaceMemberFieldRefs {
   readonly id: Prisma.FieldRef<"SpaceMember", 'String'>
+  readonly role: Prisma.FieldRef<"SpaceMember", 'SpaceRole'>
   readonly status: Prisma.FieldRef<"SpaceMember", 'MemberStatus'>
-  readonly role: Prisma.FieldRef<"SpaceMember", 'Role'>
   readonly joinedAt: Prisma.FieldRef<"SpaceMember", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SpaceMember", 'DateTime'>
   readonly blockedUntil: Prisma.FieldRef<"SpaceMember", 'DateTime'>
-  readonly banReason: Prisma.FieldRef<"SpaceMember", 'String'>
   readonly spaceId: Prisma.FieldRef<"SpaceMember", 'String'>
   readonly userId: Prisma.FieldRef<"SpaceMember", 'String'>
 }
@@ -1617,6 +1819,54 @@ export type SpaceMemberDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many SpaceMembers to delete.
    */
   limit?: number
+}
+
+/**
+ * SpaceMember.warnings
+ */
+export type SpaceMember$warningsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Warning
+   */
+  select?: Prisma.WarningSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Warning
+   */
+  omit?: Prisma.WarningOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WarningInclude<ExtArgs> | null
+  where?: Prisma.WarningWhereInput
+  orderBy?: Prisma.WarningOrderByWithRelationInput | Prisma.WarningOrderByWithRelationInput[]
+  cursor?: Prisma.WarningWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WarningScalarFieldEnum | Prisma.WarningScalarFieldEnum[]
+}
+
+/**
+ * SpaceMember.notifications
+ */
+export type SpaceMember$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
 /**

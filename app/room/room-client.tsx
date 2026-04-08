@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { format, addWeeks, subWeeks, startOfWeek, addDays, isSameDay, parseISO, differenceInCalendarDays } from "date-fns";
 import { fr } from "date-fns/locale";
-import { searchUsers } from "./actions";
+import { searchUsers, createRoom, updateRoom as updateRoomAction, deleteRoom as deleteRoomAction, createMeeting as createMeetingAction, deleteMeeting as deleteMeetingAction } from "./actions";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { ChevronLeft, ChevronRight, X, Plus, Users, Trash2 } from "lucide-react";
@@ -13,18 +13,32 @@ import { ChevronLeft, ChevronRight, X, Plus, Users, Trash2 } from "lucide-react"
 type Room = { id: string; name: string; capacity: number; color: string; };
 type Meeting = { id: string; title: string; roomId: string; date: string; startHour: number; durationHours: number; attendees: number; color: string; isTexture?: boolean; };
 
-export default function RoomClient({ userName = "Jean Dupont", avatarUrl = null, userEmail = "jean.dupont@afriland.com" }: { userName?: string, avatarUrl?: string | null, userEmail?: string }) {
+export default function RoomClient({ 
+  userName = "Jean Dupont", 
+  avatarUrl = null, 
+  userEmail = "jean.dupont@afriland.com",
+  userId = "",
+  initialRooms = [],
+  initialMeetings = []
+}: { 
+  userName?: string, 
+  avatarUrl?: string | null, 
+  userEmail?: string,
+  userId?: string,
+  initialRooms?: Room[],
+  initialMeetings?: Meeting[]
+}) {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [rooms, setRooms] = useState<Room[]>([]);
+  const [rooms, setRooms] = useState<Room[]>(initialRooms);
   const [activeRoomId, setActiveRoomId] = useState<string>('');
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [meetings, setMeetings] = useState<Meeting[]>([]);
+  const [meetings, setMeetings] = useState<Meeting[]>(initialMeetings);
   const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
   const schedulerRef = useRef<HTMLDivElement>(null);
 
   // Form State
   const [formTitle, setFormTitle] = useState("Brainstorming Q4");
-  const [formRoomId, setFormRoomId] = useState("1");
+  const [formRoomId, setFormRoomId] = useState(initialRooms.length > 0 ? initialRooms[0].id : "");
   const [formStartTime, setFormStartTime] = useState("14:00");
   const [formEndTime, setFormEndTime] = useState("15:30");
   const [formDay, setFormDay] = useState("");
@@ -48,25 +62,49 @@ export default function RoomClient({ userName = "Jean Dupont", avatarUrl = null,
   const handlePrevWeek = () => setCurrentDate(subWeeks(currentDate, 1));
   const handleNextWeek = () => setCurrentDate(addWeeks(currentDate, 1));
 
-  const updateRoom = (id: string, field: 'name' | 'capacity', value: string | number) => {
+  const updateRoom = async (id: string, field: 'name' | 'capacity', value: string | number) => {
+      // Optimistic update
       setRooms(rooms.map(r => r.id === id ? { ...r, [field]: value } : r));
+      try {
+        await updateRoomAction(id, { [field]: value });
+      } catch (e) {
+        console.error("Failed to update room:", e);
+      }
   };
 
-  const addRoom = () => {
-    const newRoom = {
-      id: Math.random().toString(36).substr(2, 9),
+  const addRoom = async () => {
+    const newRoomParams = {
       name: `Nouvelle Salle`,
       capacity: 10,
       color: palette[Math.floor(Math.random() * palette.length)]
     };
-    setRooms([...rooms, newRoom]);
+    try {
+      const created = await createRoom(newRoomParams);
+      // Ensure date properties parse properly when returned from server act
+      setRooms([...rooms, { ...created, capacity: created.capacity }]);
+      if (rooms.length === 0 || !formRoomId) {
+          setFormRoomId(created.id);
+      }
+    } catch (e) {
+      console.error("Failed to create room:", e);
+    }
   };
 
-  const deleteRoom = (id: string, e: React.MouseEvent) => {
+  const deleteRoom = async (id: string, e: React.MouseEvent) => {
      e.stopPropagation();
+     
+     // Optimistic update
      setRooms(rooms.filter(r => r.id !== id));
      if (activeRoomId === id && rooms.length > 1) {
        setActiveRoomId(rooms.filter(r => r.id !== id)[0].id);
+     }
+
+     try {
+       await deleteRoomAction(id);
+       // Also remove meetings tied to this room from local state optimistically
+       setMeetings(meetings.filter(m => m.roomId !== id));
+     } catch (err) {
+       console.error("Failed to delete room:", err);
      }
   };
 
@@ -113,7 +151,7 @@ export default function RoomClient({ userName = "Jean Dupont", avatarUrl = null,
     }
   };
 
-  const saveMeeting = () => {
+  const saveMeeting = async () => {
       if (!formTitle || !formRoomId || !formDay || !formStartTime || !formEndTime) {
           alert("Veuillez remplir tous les champs obligatoires (Titre, Salle, Jour, Début, Fin).");
           return;
@@ -130,8 +168,9 @@ export default function RoomClient({ userName = "Jean Dupont", avatarUrl = null,
       }
       const durationHours = endHour - startHour;
 
-      const newMeeting: Meeting = {
-          id: Math.random().toString(36).substr(2, 9),
+      const optimisticId = Math.random().toString(36).substr(2, 9);
+      const newMeetingOpt: Meeting = {
+          id: optimisticId,
           title: formTitle,
           roomId: formRoomId,
           date: formDay,
@@ -141,12 +180,31 @@ export default function RoomClient({ userName = "Jean Dupont", avatarUrl = null,
           color: formColor,
       };
 
-      setMeetings([...meetings, newMeeting]);
+      setMeetings([...meetings, newMeetingOpt]);
       setIsPanelOpen(false);
-      
-      // Optional: Reset form fields mostly
       setFormTitle("");
       setFormDescription("");
+
+      try {
+        const created = await createMeetingAction({
+          title: formTitle,
+          roomId: formRoomId,
+          userId: userId || "", // Should be available if passed
+          date: formDay,
+          startHour,
+          durationHours,
+          color: formColor,
+          attendees: formAttendees.filter(a => a.name.trim() !== '' || a.email.trim() !== ''),
+        });
+        
+        // Update optimistic ID
+        setMeetings(prev => prev.map(m => m.id === optimisticId ? { ...m, id: created.id } : m));
+      } catch (error) {
+        console.error("Failed to create meeting", error);
+        // Rollback
+        setMeetings(prev => prev.filter(m => m.id !== optimisticId));
+        alert("Erreur lors de la création de la réunion.");
+      }
   };
 
   const handleMeetingClick = (meeting: Meeting) => {
@@ -154,16 +212,27 @@ export default function RoomClient({ userName = "Jean Dupont", avatarUrl = null,
       setIsPanelOpen(true);
   };
 
-  const deleteSelectedMeeting = () => {
+  const deleteSelectedMeeting = async () => {
       if (selectedMeeting) {
-          setMeetings(meetings.filter(m => m.id !== selectedMeeting.id));
+          const id = selectedMeeting.id;
+          setMeetings(meetings.filter(m => m.id !== id));
           setIsPanelOpen(false);
           setSelectedMeeting(null);
+
+          try {
+            await deleteMeetingAction(id);
+          } catch (e) {
+            console.error("Failed to delete meeting", e);
+            // In a real app we might rollback the UI state if delete fails
+          }
       }
   };
 
   const openNewMeetingPanel = () => {
       setSelectedMeeting(null);
+      if (rooms.length > 0 && (!formRoomId || !rooms.some(r => r.id === formRoomId))) {
+          setFormRoomId(rooms[0].id);
+      }
       setIsPanelOpen(true);
   };
 
@@ -292,44 +361,47 @@ export default function RoomClient({ userName = "Jean Dupont", avatarUrl = null,
                </div>
              ))}
 
-             {/* Days Grid Lines */}
-             {days.map((_, i) => (
-                <div key={`col-${i}`} className="border-r border-[#eee] relative bg-[length:100%_60px] bg-[image:linear-gradient(to_bottom,#eee_1px,transparent_1px)]" style={{ gridColumn: i + 2, gridRow: '1 / -1' }} />
-             ))}
+             {/* Day Columns with Meetings */}
+             {days.map((day, i) => {
+                const dayStr = format(day, 'yyyy-MM-dd');
+                const dayMeetings = meetings.filter(m => m.date === dayStr);
+                const isToday = isSameDay(day, new Date());
 
-             {/* Current Time Indicator (Decorative example for day 4) */}
-             <div className="col-start-4 row-start-1 row-span-full relative pointer-events-none bg-[rgba(239,75,86,0.02)]">
-                  <div className="absolute left-0 right-0 h-[2px] bg-[#ef4b56] z-10" style={{ top: '250px' }}>
-                     <div className="absolute -left-[5px] -top-[4px] w-0 h-0 border-l-[5px] border-l-[#ef4b56] border-y-[5px] border-y-transparent" />
+                return (
+                  <div
+                    key={`col-${i}`}
+                    className="border-r border-[#eee] relative bg-[length:100%_60px] bg-[image:linear-gradient(to_bottom,#eee_1px,transparent_1px)]"
+                    style={{ gridColumn: i + 2, gridRow: '1 / -1' }}
+                  >
+                    {/* Current Time Indicator */}
+                    {isToday && (
+                      <div className="absolute left-0 right-0 z-[3] pointer-events-none" style={{ top: `${((new Date().getHours() - 8) + new Date().getMinutes() / 60) * 60}px` }}>
+                        <div className="h-[2px] bg-[#ef4b56] w-full">
+                          <div className="absolute -left-[5px] -top-[4px] w-0 h-0 border-l-[5px] border-l-[#ef4b56] border-y-[5px] border-y-transparent" />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Meetings for this day */}
+                    {dayMeetings.map((meeting) => (
+                      <div
+                        key={meeting.id}
+                        onClick={() => handleMeetingClick(meeting)}
+                        className={`absolute left-[3px] right-[3px] p-2 text-white text-[11px] overflow-hidden shadow-[2px_2px_5px_rgba(0,0,0,0.1)] cursor-pointer hover:brightness-110 hover:z-10 transition-all rounded-sm z-[2] ${meeting.isTexture ? 'texture-bg' : ''}`}
+                        style={{
+                          top: `${(meeting.startHour - 8) * 60}px`,
+                          height: `${meeting.durationHours * 60}px`,
+                          backgroundColor: meeting.color,
+                        }}
+                      >
+                        <span className="font-bold block mb-0.5 whitespace-nowrap overflow-hidden text-ellipsis">{meeting.title}</span>
+                        <div className="opacity-90 flex items-center gap-1 text-[10px]">
+                          <span>👥 {meeting.attendees}</span> • <span>{Math.floor(meeting.startHour)}:{(meeting.startHour % 1 * 60).toString().padStart(2, '0')} - {Math.floor(meeting.startHour + meeting.durationHours)}:{((meeting.startHour + meeting.durationHours) % 1 * 60).toString().padStart(2, '0')}</span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-             </div>
-
-             {/* Meetings */}
-             {meetings.map((meeting) => {
-                 const meetingDate = parseISO(meeting.date);
-                 const offset = differenceInCalendarDays(meetingDate, weekStart);
-                 
-                 // Show only if within current Mono-Sat view (offset 0-5)
-                 if (offset < 0 || offset > 5) return null;
-
-                 return (
-                 <div key={meeting.id} 
-                      onClick={() => handleMeetingClick(meeting)}
-                      className={`absolute inset-x-[4px] p-2 text-white text-[11px] overflow-hidden shadow-[2px_2px_5px_rgba(0,0,0,0.1)] cursor-pointer hover:scale-[1.02] hover:z-10 transition-transform rounded-sm ${meeting.isTexture ? 'texture-bg' : ''}`}
-                      style={{
-                         top: `${(meeting.startHour - 8) * 60}px`,
-                         height: `${meeting.durationHours * 60}px`,
-                         backgroundColor: meeting.color,
-                         gridColumn: offset + 2,
-                         gridRow: '1 / -1'
-                      }}
-                 >
-                     <span className="font-bold block mb-0.5 whitespace-nowrap overflow-hidden text-ellipsis">{meeting.title}</span>
-                     <div className="opacity-90 flex items-center gap-1 text-[10px]">
-                        <span>👥 {meeting.attendees}</span> • <span>{Math.floor(meeting.startHour)}:{(meeting.startHour % 1 * 60).toString().padStart(2, '0')} - {Math.floor(meeting.startHour + meeting.durationHours)}:{((meeting.startHour + meeting.durationHours) % 1 * 60).toString().padStart(2, '0')}</span>
-                     </div>
-                 </div>
-                 );
+                );
              })}
           </div>
         </div>

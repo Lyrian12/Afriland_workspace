@@ -9,18 +9,18 @@
 * 🟢 You can import this file directly.
 */
 
-export const Role = {
+export const SpaceRole = {
   ADMIN: 'ADMIN',
-  SECRETARY: 'SECRETARY',
-  USER: 'USER'
+  MODERATOR: 'MODERATOR',
+  MEMBER: 'MEMBER'
 } as const
 
-export type Role = (typeof Role)[keyof typeof Role]
+export type SpaceRole = (typeof SpaceRole)[keyof typeof SpaceRole]
 
 
 export const MemberStatus = {
   ACTIVE: 'ACTIVE',
-  BANNED: 'BANNED',
+  WARNED: 'WARNED',
   BLOCKED: 'BLOCKED'
 } as const
 
@@ -41,7 +41,19 @@ export const MessageType = {
   TEXT: 'TEXT',
   FILE: 'FILE',
   AUDIO: 'AUDIO',
-  IMAGE: 'IMAGE'
+  IMAGE: 'IMAGE',
+  SYSTEM: 'SYSTEM'
 } as const
 
 export type MessageType = (typeof MessageType)[keyof typeof MessageType]
+
+
+export const NotificationType = {
+  MENTION: 'MENTION',
+  WARNING: 'WARNING',
+  PIN: 'PIN',
+  NEW_MESSAGE: 'NEW_MESSAGE',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

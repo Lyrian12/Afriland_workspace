@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { RecordClient } from "@/app/record/record-client";
 import { Suspense } from "react";
+import { getUserRecordings } from "./actions";
 
 export default function RecordPage() {
   return (
@@ -26,8 +27,9 @@ async function RecordContent() {
   // Get user name (use full_name if available, fallback to email name, or "Utilisateur")
   let userName = user.user_metadata?.full_name;
   if (!userName) {
-    userName = user.email ? user.email.split('@')[0] : "Utilisateur";
   }
 
-  return <RecordClient userName={userName} avatarUrl={avatarUrl} />;
+  const initialRecordings = await getUserRecordings();
+
+  return <RecordClient userName={userName} avatarUrl={avatarUrl} initialRecordings={initialRecordings} />;
 }

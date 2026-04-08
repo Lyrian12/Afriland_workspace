@@ -35,6 +35,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
+      <head>
+        <script src="https://unpkg.com/@phosphor-icons/web"></script>
+      </head>
       <body className={`${geistSans.variable} ${jetbrainsMono.variable} antialiased`}>
         <ThemeProvider
           attribute="class"

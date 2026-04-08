@@ -31,7 +31,7 @@ export type UserMinAggregateOutputType = {
   avatar: string | null
   bio: string | null
   phone: string | null
-  role: $Enums.Role | null
+  role: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -43,7 +43,7 @@ export type UserMaxAggregateOutputType = {
   avatar: string | null
   bio: string | null
   phone: string | null
-  role: $Enums.Role | null
+  role: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -178,7 +178,7 @@ export type UserGroupByOutputType = {
   avatar: string | null
   bio: string | null
   phone: string | null
-  role: $Enums.Role
+  role: string
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -211,17 +211,18 @@ export type UserWhereInput = {
   avatar?: Prisma.StringNullableFilter<"User"> | string | null
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
-  role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
+  role?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   recordings?: Prisma.RecordingListRelationFilter
-  meetingAttendees?: Prisma.MeetingAttendeeListRelationFilter
   createdMeetings?: Prisma.MeetingListRelationFilter
+  meetingAttendees?: Prisma.MeetingAttendeeListRelationFilter
   ownedSpaces?: Prisma.SpaceListRelationFilter
   spaceMemberships?: Prisma.SpaceMemberListRelationFilter
   createdChannels?: Prisma.ChannelListRelationFilter
   messages?: Prisma.MessageListRelationFilter
   sentOtpInvites?: Prisma.OtpInviteListRelationFilter
+  issuedWarnings?: Prisma.WarningListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -235,13 +236,14 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   recordings?: Prisma.RecordingOrderByRelationAggregateInput
-  meetingAttendees?: Prisma.MeetingAttendeeOrderByRelationAggregateInput
   createdMeetings?: Prisma.MeetingOrderByRelationAggregateInput
+  meetingAttendees?: Prisma.MeetingAttendeeOrderByRelationAggregateInput
   ownedSpaces?: Prisma.SpaceOrderByRelationAggregateInput
   spaceMemberships?: Prisma.SpaceMemberOrderByRelationAggregateInput
   createdChannels?: Prisma.ChannelOrderByRelationAggregateInput
   messages?: Prisma.MessageOrderByRelationAggregateInput
   sentOtpInvites?: Prisma.OtpInviteOrderByRelationAggregateInput
+  issuedWarnings?: Prisma.WarningOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -254,17 +256,18 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   avatar?: Prisma.StringNullableFilter<"User"> | string | null
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
-  role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
+  role?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   recordings?: Prisma.RecordingListRelationFilter
-  meetingAttendees?: Prisma.MeetingAttendeeListRelationFilter
   createdMeetings?: Prisma.MeetingListRelationFilter
+  meetingAttendees?: Prisma.MeetingAttendeeListRelationFilter
   ownedSpaces?: Prisma.SpaceListRelationFilter
   spaceMemberships?: Prisma.SpaceMemberListRelationFilter
   createdChannels?: Prisma.ChannelListRelationFilter
   messages?: Prisma.MessageListRelationFilter
   sentOtpInvites?: Prisma.OtpInviteListRelationFilter
+  issuedWarnings?: Prisma.WarningListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -292,7 +295,7 @@ export type UserScalarWhereWithAggregatesInput = {
   avatar?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   bio?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
+  role?: Prisma.StringWithAggregatesFilter<"User"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -304,17 +307,18 @@ export type UserCreateInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingCreateNestedManyWithoutCreatedByInput
-  meetingAttendees?: Prisma.MeetingAttendeeCreateNestedManyWithoutUserInput
   createdMeetings?: Prisma.MeetingCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeCreateNestedManyWithoutUserInput
   ownedSpaces?: Prisma.SpaceCreateNestedManyWithoutOwnerInput
   spaceMemberships?: Prisma.SpaceMemberCreateNestedManyWithoutUserInput
   createdChannels?: Prisma.ChannelCreateNestedManyWithoutCreatedByInput
   messages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   sentOtpInvites?: Prisma.OtpInviteCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -324,17 +328,18 @@ export type UserUncheckedCreateInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingUncheckedCreateNestedManyWithoutCreatedByInput
-  meetingAttendees?: Prisma.MeetingAttendeeUncheckedCreateNestedManyWithoutUserInput
   createdMeetings?: Prisma.MeetingUncheckedCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedCreateNestedManyWithoutUserInput
   ownedSpaces?: Prisma.SpaceUncheckedCreateNestedManyWithoutOwnerInput
   spaceMemberships?: Prisma.SpaceMemberUncheckedCreateNestedManyWithoutUserInput
   createdChannels?: Prisma.ChannelUncheckedCreateNestedManyWithoutCreatedByInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningUncheckedCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserUpdateInput = {
@@ -344,17 +349,18 @@ export type UserUpdateInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUpdateManyWithoutCreatedByNestedInput
-  meetingAttendees?: Prisma.MeetingAttendeeUpdateManyWithoutUserNestedInput
   createdMeetings?: Prisma.MeetingUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUpdateManyWithoutUserNestedInput
   ownedSpaces?: Prisma.SpaceUpdateManyWithoutOwnerNestedInput
   spaceMemberships?: Prisma.SpaceMemberUpdateManyWithoutUserNestedInput
   createdChannels?: Prisma.ChannelUpdateManyWithoutCreatedByNestedInput
   messages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   sentOtpInvites?: Prisma.OtpInviteUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -364,17 +370,18 @@ export type UserUncheckedUpdateInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUncheckedUpdateManyWithoutCreatedByNestedInput
-  meetingAttendees?: Prisma.MeetingAttendeeUncheckedUpdateManyWithoutUserNestedInput
   createdMeetings?: Prisma.MeetingUncheckedUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedUpdateManyWithoutUserNestedInput
   ownedSpaces?: Prisma.SpaceUncheckedUpdateManyWithoutOwnerNestedInput
   spaceMemberships?: Prisma.SpaceMemberUncheckedUpdateManyWithoutUserNestedInput
   createdChannels?: Prisma.ChannelUncheckedUpdateManyWithoutCreatedByNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUncheckedUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -384,7 +391,7 @@ export type UserCreateManyInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -396,7 +403,7 @@ export type UserUpdateManyMutationInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -408,7 +415,7 @@ export type UserUncheckedUpdateManyInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -465,10 +472,6 @@ export type StringFieldUpdateOperationsInput = {
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
-}
-
-export type EnumRoleFieldUpdateOperationsInput = {
-  set?: $Enums.Role
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -547,6 +550,20 @@ export type UserUpdateOneRequiredWithoutSpaceMembershipsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSpaceMembershipsInput, Prisma.UserUpdateWithoutSpaceMembershipsInput>, Prisma.UserUncheckedUpdateWithoutSpaceMembershipsInput>
 }
 
+export type UserCreateNestedOneWithoutIssuedWarningsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutIssuedWarningsInput, Prisma.UserUncheckedCreateWithoutIssuedWarningsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutIssuedWarningsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutIssuedWarningsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutIssuedWarningsInput, Prisma.UserUncheckedCreateWithoutIssuedWarningsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutIssuedWarningsInput
+  upsert?: Prisma.UserUpsertWithoutIssuedWarningsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutIssuedWarningsInput, Prisma.UserUpdateWithoutIssuedWarningsInput>, Prisma.UserUncheckedUpdateWithoutIssuedWarningsInput>
+}
+
 export type UserCreateNestedOneWithoutCreatedChannelsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedChannelsInput, Prisma.UserUncheckedCreateWithoutCreatedChannelsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedChannelsInput
@@ -596,16 +613,17 @@ export type UserCreateWithoutRecordingsInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  meetingAttendees?: Prisma.MeetingAttendeeCreateNestedManyWithoutUserInput
   createdMeetings?: Prisma.MeetingCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeCreateNestedManyWithoutUserInput
   ownedSpaces?: Prisma.SpaceCreateNestedManyWithoutOwnerInput
   spaceMemberships?: Prisma.SpaceMemberCreateNestedManyWithoutUserInput
   createdChannels?: Prisma.ChannelCreateNestedManyWithoutCreatedByInput
   messages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   sentOtpInvites?: Prisma.OtpInviteCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserUncheckedCreateWithoutRecordingsInput = {
@@ -615,16 +633,17 @@ export type UserUncheckedCreateWithoutRecordingsInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  meetingAttendees?: Prisma.MeetingAttendeeUncheckedCreateNestedManyWithoutUserInput
   createdMeetings?: Prisma.MeetingUncheckedCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedCreateNestedManyWithoutUserInput
   ownedSpaces?: Prisma.SpaceUncheckedCreateNestedManyWithoutOwnerInput
   spaceMemberships?: Prisma.SpaceMemberUncheckedCreateNestedManyWithoutUserInput
   createdChannels?: Prisma.ChannelUncheckedCreateNestedManyWithoutCreatedByInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningUncheckedCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserCreateOrConnectWithoutRecordingsInput = {
@@ -650,16 +669,17 @@ export type UserUpdateWithoutRecordingsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  meetingAttendees?: Prisma.MeetingAttendeeUpdateManyWithoutUserNestedInput
   createdMeetings?: Prisma.MeetingUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUpdateManyWithoutUserNestedInput
   ownedSpaces?: Prisma.SpaceUpdateManyWithoutOwnerNestedInput
   spaceMemberships?: Prisma.SpaceMemberUpdateManyWithoutUserNestedInput
   createdChannels?: Prisma.ChannelUpdateManyWithoutCreatedByNestedInput
   messages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   sentOtpInvites?: Prisma.OtpInviteUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRecordingsInput = {
@@ -669,16 +689,17 @@ export type UserUncheckedUpdateWithoutRecordingsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  meetingAttendees?: Prisma.MeetingAttendeeUncheckedUpdateManyWithoutUserNestedInput
   createdMeetings?: Prisma.MeetingUncheckedUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedUpdateManyWithoutUserNestedInput
   ownedSpaces?: Prisma.SpaceUncheckedUpdateManyWithoutOwnerNestedInput
   spaceMemberships?: Prisma.SpaceMemberUncheckedUpdateManyWithoutUserNestedInput
   createdChannels?: Prisma.ChannelUncheckedUpdateManyWithoutCreatedByNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUncheckedUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserCreateWithoutCreatedMeetingsInput = {
@@ -688,7 +709,7 @@ export type UserCreateWithoutCreatedMeetingsInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingCreateNestedManyWithoutCreatedByInput
@@ -698,6 +719,7 @@ export type UserCreateWithoutCreatedMeetingsInput = {
   createdChannels?: Prisma.ChannelCreateNestedManyWithoutCreatedByInput
   messages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   sentOtpInvites?: Prisma.OtpInviteCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserUncheckedCreateWithoutCreatedMeetingsInput = {
@@ -707,7 +729,7 @@ export type UserUncheckedCreateWithoutCreatedMeetingsInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingUncheckedCreateNestedManyWithoutCreatedByInput
@@ -717,6 +739,7 @@ export type UserUncheckedCreateWithoutCreatedMeetingsInput = {
   createdChannels?: Prisma.ChannelUncheckedCreateNestedManyWithoutCreatedByInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningUncheckedCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserCreateOrConnectWithoutCreatedMeetingsInput = {
@@ -742,7 +765,7 @@ export type UserUpdateWithoutCreatedMeetingsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUpdateManyWithoutCreatedByNestedInput
@@ -752,6 +775,7 @@ export type UserUpdateWithoutCreatedMeetingsInput = {
   createdChannels?: Prisma.ChannelUpdateManyWithoutCreatedByNestedInput
   messages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   sentOtpInvites?: Prisma.OtpInviteUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedMeetingsInput = {
@@ -761,7 +785,7 @@ export type UserUncheckedUpdateWithoutCreatedMeetingsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -771,6 +795,7 @@ export type UserUncheckedUpdateWithoutCreatedMeetingsInput = {
   createdChannels?: Prisma.ChannelUncheckedUpdateManyWithoutCreatedByNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUncheckedUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserCreateWithoutMeetingAttendeesInput = {
@@ -780,7 +805,7 @@ export type UserCreateWithoutMeetingAttendeesInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingCreateNestedManyWithoutCreatedByInput
@@ -790,6 +815,7 @@ export type UserCreateWithoutMeetingAttendeesInput = {
   createdChannels?: Prisma.ChannelCreateNestedManyWithoutCreatedByInput
   messages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   sentOtpInvites?: Prisma.OtpInviteCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserUncheckedCreateWithoutMeetingAttendeesInput = {
@@ -799,7 +825,7 @@ export type UserUncheckedCreateWithoutMeetingAttendeesInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingUncheckedCreateNestedManyWithoutCreatedByInput
@@ -809,6 +835,7 @@ export type UserUncheckedCreateWithoutMeetingAttendeesInput = {
   createdChannels?: Prisma.ChannelUncheckedCreateNestedManyWithoutCreatedByInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningUncheckedCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserCreateOrConnectWithoutMeetingAttendeesInput = {
@@ -834,7 +861,7 @@ export type UserUpdateWithoutMeetingAttendeesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUpdateManyWithoutCreatedByNestedInput
@@ -844,6 +871,7 @@ export type UserUpdateWithoutMeetingAttendeesInput = {
   createdChannels?: Prisma.ChannelUpdateManyWithoutCreatedByNestedInput
   messages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   sentOtpInvites?: Prisma.OtpInviteUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMeetingAttendeesInput = {
@@ -853,7 +881,7 @@ export type UserUncheckedUpdateWithoutMeetingAttendeesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -863,6 +891,7 @@ export type UserUncheckedUpdateWithoutMeetingAttendeesInput = {
   createdChannels?: Prisma.ChannelUncheckedUpdateManyWithoutCreatedByNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUncheckedUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserCreateWithoutOwnedSpacesInput = {
@@ -872,16 +901,17 @@ export type UserCreateWithoutOwnedSpacesInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingCreateNestedManyWithoutCreatedByInput
-  meetingAttendees?: Prisma.MeetingAttendeeCreateNestedManyWithoutUserInput
   createdMeetings?: Prisma.MeetingCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeCreateNestedManyWithoutUserInput
   spaceMemberships?: Prisma.SpaceMemberCreateNestedManyWithoutUserInput
   createdChannels?: Prisma.ChannelCreateNestedManyWithoutCreatedByInput
   messages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   sentOtpInvites?: Prisma.OtpInviteCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserUncheckedCreateWithoutOwnedSpacesInput = {
@@ -891,16 +921,17 @@ export type UserUncheckedCreateWithoutOwnedSpacesInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingUncheckedCreateNestedManyWithoutCreatedByInput
-  meetingAttendees?: Prisma.MeetingAttendeeUncheckedCreateNestedManyWithoutUserInput
   createdMeetings?: Prisma.MeetingUncheckedCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedCreateNestedManyWithoutUserInput
   spaceMemberships?: Prisma.SpaceMemberUncheckedCreateNestedManyWithoutUserInput
   createdChannels?: Prisma.ChannelUncheckedCreateNestedManyWithoutCreatedByInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningUncheckedCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserCreateOrConnectWithoutOwnedSpacesInput = {
@@ -926,16 +957,17 @@ export type UserUpdateWithoutOwnedSpacesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUpdateManyWithoutCreatedByNestedInput
-  meetingAttendees?: Prisma.MeetingAttendeeUpdateManyWithoutUserNestedInput
   createdMeetings?: Prisma.MeetingUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUpdateManyWithoutUserNestedInput
   spaceMemberships?: Prisma.SpaceMemberUpdateManyWithoutUserNestedInput
   createdChannels?: Prisma.ChannelUpdateManyWithoutCreatedByNestedInput
   messages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   sentOtpInvites?: Prisma.OtpInviteUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOwnedSpacesInput = {
@@ -945,16 +977,17 @@ export type UserUncheckedUpdateWithoutOwnedSpacesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUncheckedUpdateManyWithoutCreatedByNestedInput
-  meetingAttendees?: Prisma.MeetingAttendeeUncheckedUpdateManyWithoutUserNestedInput
   createdMeetings?: Prisma.MeetingUncheckedUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedUpdateManyWithoutUserNestedInput
   spaceMemberships?: Prisma.SpaceMemberUncheckedUpdateManyWithoutUserNestedInput
   createdChannels?: Prisma.ChannelUncheckedUpdateManyWithoutCreatedByNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUncheckedUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserCreateWithoutSpaceMembershipsInput = {
@@ -964,16 +997,17 @@ export type UserCreateWithoutSpaceMembershipsInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingCreateNestedManyWithoutCreatedByInput
-  meetingAttendees?: Prisma.MeetingAttendeeCreateNestedManyWithoutUserInput
   createdMeetings?: Prisma.MeetingCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeCreateNestedManyWithoutUserInput
   ownedSpaces?: Prisma.SpaceCreateNestedManyWithoutOwnerInput
   createdChannels?: Prisma.ChannelCreateNestedManyWithoutCreatedByInput
   messages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   sentOtpInvites?: Prisma.OtpInviteCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserUncheckedCreateWithoutSpaceMembershipsInput = {
@@ -983,16 +1017,17 @@ export type UserUncheckedCreateWithoutSpaceMembershipsInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingUncheckedCreateNestedManyWithoutCreatedByInput
-  meetingAttendees?: Prisma.MeetingAttendeeUncheckedCreateNestedManyWithoutUserInput
   createdMeetings?: Prisma.MeetingUncheckedCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedCreateNestedManyWithoutUserInput
   ownedSpaces?: Prisma.SpaceUncheckedCreateNestedManyWithoutOwnerInput
   createdChannels?: Prisma.ChannelUncheckedCreateNestedManyWithoutCreatedByInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningUncheckedCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserCreateOrConnectWithoutSpaceMembershipsInput = {
@@ -1018,16 +1053,17 @@ export type UserUpdateWithoutSpaceMembershipsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUpdateManyWithoutCreatedByNestedInput
-  meetingAttendees?: Prisma.MeetingAttendeeUpdateManyWithoutUserNestedInput
   createdMeetings?: Prisma.MeetingUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUpdateManyWithoutUserNestedInput
   ownedSpaces?: Prisma.SpaceUpdateManyWithoutOwnerNestedInput
   createdChannels?: Prisma.ChannelUpdateManyWithoutCreatedByNestedInput
   messages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   sentOtpInvites?: Prisma.OtpInviteUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSpaceMembershipsInput = {
@@ -1037,13 +1073,110 @@ export type UserUncheckedUpdateWithoutSpaceMembershipsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUncheckedUpdateManyWithoutCreatedByNestedInput
-  meetingAttendees?: Prisma.MeetingAttendeeUncheckedUpdateManyWithoutUserNestedInput
   createdMeetings?: Prisma.MeetingUncheckedUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedUpdateManyWithoutUserNestedInput
   ownedSpaces?: Prisma.SpaceUncheckedUpdateManyWithoutOwnerNestedInput
+  createdChannels?: Prisma.ChannelUncheckedUpdateManyWithoutCreatedByNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  sentOtpInvites?: Prisma.OtpInviteUncheckedUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUncheckedUpdateManyWithoutIssuedByNestedInput
+}
+
+export type UserCreateWithoutIssuedWarningsInput = {
+  id: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  bio?: string | null
+  phone?: string | null
+  role?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  recordings?: Prisma.RecordingCreateNestedManyWithoutCreatedByInput
+  createdMeetings?: Prisma.MeetingCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeCreateNestedManyWithoutUserInput
+  ownedSpaces?: Prisma.SpaceCreateNestedManyWithoutOwnerInput
+  spaceMemberships?: Prisma.SpaceMemberCreateNestedManyWithoutUserInput
+  createdChannels?: Prisma.ChannelCreateNestedManyWithoutCreatedByInput
+  messages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  sentOtpInvites?: Prisma.OtpInviteCreateNestedManyWithoutSentByInput
+}
+
+export type UserUncheckedCreateWithoutIssuedWarningsInput = {
+  id: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  bio?: string | null
+  phone?: string | null
+  role?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  recordings?: Prisma.RecordingUncheckedCreateNestedManyWithoutCreatedByInput
+  createdMeetings?: Prisma.MeetingUncheckedCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedCreateNestedManyWithoutUserInput
+  ownedSpaces?: Prisma.SpaceUncheckedCreateNestedManyWithoutOwnerInput
+  spaceMemberships?: Prisma.SpaceMemberUncheckedCreateNestedManyWithoutUserInput
+  createdChannels?: Prisma.ChannelUncheckedCreateNestedManyWithoutCreatedByInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  sentOtpInvites?: Prisma.OtpInviteUncheckedCreateNestedManyWithoutSentByInput
+}
+
+export type UserCreateOrConnectWithoutIssuedWarningsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutIssuedWarningsInput, Prisma.UserUncheckedCreateWithoutIssuedWarningsInput>
+}
+
+export type UserUpsertWithoutIssuedWarningsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutIssuedWarningsInput, Prisma.UserUncheckedUpdateWithoutIssuedWarningsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutIssuedWarningsInput, Prisma.UserUncheckedCreateWithoutIssuedWarningsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutIssuedWarningsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutIssuedWarningsInput, Prisma.UserUncheckedUpdateWithoutIssuedWarningsInput>
+}
+
+export type UserUpdateWithoutIssuedWarningsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recordings?: Prisma.RecordingUpdateManyWithoutCreatedByNestedInput
+  createdMeetings?: Prisma.MeetingUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUpdateManyWithoutUserNestedInput
+  ownedSpaces?: Prisma.SpaceUpdateManyWithoutOwnerNestedInput
+  spaceMemberships?: Prisma.SpaceMemberUpdateManyWithoutUserNestedInput
+  createdChannels?: Prisma.ChannelUpdateManyWithoutCreatedByNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  sentOtpInvites?: Prisma.OtpInviteUpdateManyWithoutSentByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutIssuedWarningsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recordings?: Prisma.RecordingUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdMeetings?: Prisma.MeetingUncheckedUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedUpdateManyWithoutUserNestedInput
+  ownedSpaces?: Prisma.SpaceUncheckedUpdateManyWithoutOwnerNestedInput
+  spaceMemberships?: Prisma.SpaceMemberUncheckedUpdateManyWithoutUserNestedInput
   createdChannels?: Prisma.ChannelUncheckedUpdateManyWithoutCreatedByNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedUpdateManyWithoutSentByNestedInput
@@ -1056,16 +1189,17 @@ export type UserCreateWithoutCreatedChannelsInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingCreateNestedManyWithoutCreatedByInput
-  meetingAttendees?: Prisma.MeetingAttendeeCreateNestedManyWithoutUserInput
   createdMeetings?: Prisma.MeetingCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeCreateNestedManyWithoutUserInput
   ownedSpaces?: Prisma.SpaceCreateNestedManyWithoutOwnerInput
   spaceMemberships?: Prisma.SpaceMemberCreateNestedManyWithoutUserInput
   messages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   sentOtpInvites?: Prisma.OtpInviteCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserUncheckedCreateWithoutCreatedChannelsInput = {
@@ -1075,16 +1209,17 @@ export type UserUncheckedCreateWithoutCreatedChannelsInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingUncheckedCreateNestedManyWithoutCreatedByInput
-  meetingAttendees?: Prisma.MeetingAttendeeUncheckedCreateNestedManyWithoutUserInput
   createdMeetings?: Prisma.MeetingUncheckedCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedCreateNestedManyWithoutUserInput
   ownedSpaces?: Prisma.SpaceUncheckedCreateNestedManyWithoutOwnerInput
   spaceMemberships?: Prisma.SpaceMemberUncheckedCreateNestedManyWithoutUserInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningUncheckedCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserCreateOrConnectWithoutCreatedChannelsInput = {
@@ -1110,16 +1245,17 @@ export type UserUpdateWithoutCreatedChannelsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUpdateManyWithoutCreatedByNestedInput
-  meetingAttendees?: Prisma.MeetingAttendeeUpdateManyWithoutUserNestedInput
   createdMeetings?: Prisma.MeetingUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUpdateManyWithoutUserNestedInput
   ownedSpaces?: Prisma.SpaceUpdateManyWithoutOwnerNestedInput
   spaceMemberships?: Prisma.SpaceMemberUpdateManyWithoutUserNestedInput
   messages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   sentOtpInvites?: Prisma.OtpInviteUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedChannelsInput = {
@@ -1129,16 +1265,17 @@ export type UserUncheckedUpdateWithoutCreatedChannelsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUncheckedUpdateManyWithoutCreatedByNestedInput
-  meetingAttendees?: Prisma.MeetingAttendeeUncheckedUpdateManyWithoutUserNestedInput
   createdMeetings?: Prisma.MeetingUncheckedUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedUpdateManyWithoutUserNestedInput
   ownedSpaces?: Prisma.SpaceUncheckedUpdateManyWithoutOwnerNestedInput
   spaceMemberships?: Prisma.SpaceMemberUncheckedUpdateManyWithoutUserNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUncheckedUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserCreateWithoutMessagesInput = {
@@ -1148,16 +1285,17 @@ export type UserCreateWithoutMessagesInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingCreateNestedManyWithoutCreatedByInput
-  meetingAttendees?: Prisma.MeetingAttendeeCreateNestedManyWithoutUserInput
   createdMeetings?: Prisma.MeetingCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeCreateNestedManyWithoutUserInput
   ownedSpaces?: Prisma.SpaceCreateNestedManyWithoutOwnerInput
   spaceMemberships?: Prisma.SpaceMemberCreateNestedManyWithoutUserInput
   createdChannels?: Prisma.ChannelCreateNestedManyWithoutCreatedByInput
   sentOtpInvites?: Prisma.OtpInviteCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserUncheckedCreateWithoutMessagesInput = {
@@ -1167,16 +1305,17 @@ export type UserUncheckedCreateWithoutMessagesInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingUncheckedCreateNestedManyWithoutCreatedByInput
-  meetingAttendees?: Prisma.MeetingAttendeeUncheckedCreateNestedManyWithoutUserInput
   createdMeetings?: Prisma.MeetingUncheckedCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedCreateNestedManyWithoutUserInput
   ownedSpaces?: Prisma.SpaceUncheckedCreateNestedManyWithoutOwnerInput
   spaceMemberships?: Prisma.SpaceMemberUncheckedCreateNestedManyWithoutUserInput
   createdChannels?: Prisma.ChannelUncheckedCreateNestedManyWithoutCreatedByInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedCreateNestedManyWithoutSentByInput
+  issuedWarnings?: Prisma.WarningUncheckedCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserCreateOrConnectWithoutMessagesInput = {
@@ -1202,16 +1341,17 @@ export type UserUpdateWithoutMessagesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUpdateManyWithoutCreatedByNestedInput
-  meetingAttendees?: Prisma.MeetingAttendeeUpdateManyWithoutUserNestedInput
   createdMeetings?: Prisma.MeetingUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUpdateManyWithoutUserNestedInput
   ownedSpaces?: Prisma.SpaceUpdateManyWithoutOwnerNestedInput
   spaceMemberships?: Prisma.SpaceMemberUpdateManyWithoutUserNestedInput
   createdChannels?: Prisma.ChannelUpdateManyWithoutCreatedByNestedInput
   sentOtpInvites?: Prisma.OtpInviteUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMessagesInput = {
@@ -1221,16 +1361,17 @@ export type UserUncheckedUpdateWithoutMessagesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUncheckedUpdateManyWithoutCreatedByNestedInput
-  meetingAttendees?: Prisma.MeetingAttendeeUncheckedUpdateManyWithoutUserNestedInput
   createdMeetings?: Prisma.MeetingUncheckedUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedUpdateManyWithoutUserNestedInput
   ownedSpaces?: Prisma.SpaceUncheckedUpdateManyWithoutOwnerNestedInput
   spaceMemberships?: Prisma.SpaceMemberUncheckedUpdateManyWithoutUserNestedInput
   createdChannels?: Prisma.ChannelUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOtpInvites?: Prisma.OtpInviteUncheckedUpdateManyWithoutSentByNestedInput
+  issuedWarnings?: Prisma.WarningUncheckedUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserCreateWithoutSentOtpInvitesInput = {
@@ -1240,16 +1381,17 @@ export type UserCreateWithoutSentOtpInvitesInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingCreateNestedManyWithoutCreatedByInput
-  meetingAttendees?: Prisma.MeetingAttendeeCreateNestedManyWithoutUserInput
   createdMeetings?: Prisma.MeetingCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeCreateNestedManyWithoutUserInput
   ownedSpaces?: Prisma.SpaceCreateNestedManyWithoutOwnerInput
   spaceMemberships?: Prisma.SpaceMemberCreateNestedManyWithoutUserInput
   createdChannels?: Prisma.ChannelCreateNestedManyWithoutCreatedByInput
   messages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  issuedWarnings?: Prisma.WarningCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserUncheckedCreateWithoutSentOtpInvitesInput = {
@@ -1259,16 +1401,17 @@ export type UserUncheckedCreateWithoutSentOtpInvitesInput = {
   avatar?: string | null
   bio?: string | null
   phone?: string | null
-  role?: $Enums.Role
+  role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   recordings?: Prisma.RecordingUncheckedCreateNestedManyWithoutCreatedByInput
-  meetingAttendees?: Prisma.MeetingAttendeeUncheckedCreateNestedManyWithoutUserInput
   createdMeetings?: Prisma.MeetingUncheckedCreateNestedManyWithoutCreatedByInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedCreateNestedManyWithoutUserInput
   ownedSpaces?: Prisma.SpaceUncheckedCreateNestedManyWithoutOwnerInput
   spaceMemberships?: Prisma.SpaceMemberUncheckedCreateNestedManyWithoutUserInput
   createdChannels?: Prisma.ChannelUncheckedCreateNestedManyWithoutCreatedByInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  issuedWarnings?: Prisma.WarningUncheckedCreateNestedManyWithoutIssuedByInput
 }
 
 export type UserCreateOrConnectWithoutSentOtpInvitesInput = {
@@ -1294,16 +1437,17 @@ export type UserUpdateWithoutSentOtpInvitesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUpdateManyWithoutCreatedByNestedInput
-  meetingAttendees?: Prisma.MeetingAttendeeUpdateManyWithoutUserNestedInput
   createdMeetings?: Prisma.MeetingUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUpdateManyWithoutUserNestedInput
   ownedSpaces?: Prisma.SpaceUpdateManyWithoutOwnerNestedInput
   spaceMemberships?: Prisma.SpaceMemberUpdateManyWithoutUserNestedInput
   createdChannels?: Prisma.ChannelUpdateManyWithoutCreatedByNestedInput
   messages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  issuedWarnings?: Prisma.WarningUpdateManyWithoutIssuedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSentOtpInvitesInput = {
@@ -1313,16 +1457,17 @@ export type UserUncheckedUpdateWithoutSentOtpInvitesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recordings?: Prisma.RecordingUncheckedUpdateManyWithoutCreatedByNestedInput
-  meetingAttendees?: Prisma.MeetingAttendeeUncheckedUpdateManyWithoutUserNestedInput
   createdMeetings?: Prisma.MeetingUncheckedUpdateManyWithoutCreatedByNestedInput
+  meetingAttendees?: Prisma.MeetingAttendeeUncheckedUpdateManyWithoutUserNestedInput
   ownedSpaces?: Prisma.SpaceUncheckedUpdateManyWithoutOwnerNestedInput
   spaceMemberships?: Prisma.SpaceMemberUncheckedUpdateManyWithoutUserNestedInput
   createdChannels?: Prisma.ChannelUncheckedUpdateManyWithoutCreatedByNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  issuedWarnings?: Prisma.WarningUncheckedUpdateManyWithoutIssuedByNestedInput
 }
 
 
@@ -1332,24 +1477,26 @@ export type UserUncheckedUpdateWithoutSentOtpInvitesInput = {
 
 export type UserCountOutputType = {
   recordings: number
-  meetingAttendees: number
   createdMeetings: number
+  meetingAttendees: number
   ownedSpaces: number
   spaceMemberships: number
   createdChannels: number
   messages: number
   sentOtpInvites: number
+  issuedWarnings: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   recordings?: boolean | UserCountOutputTypeCountRecordingsArgs
-  meetingAttendees?: boolean | UserCountOutputTypeCountMeetingAttendeesArgs
   createdMeetings?: boolean | UserCountOutputTypeCountCreatedMeetingsArgs
+  meetingAttendees?: boolean | UserCountOutputTypeCountMeetingAttendeesArgs
   ownedSpaces?: boolean | UserCountOutputTypeCountOwnedSpacesArgs
   spaceMemberships?: boolean | UserCountOutputTypeCountSpaceMembershipsArgs
   createdChannels?: boolean | UserCountOutputTypeCountCreatedChannelsArgs
   messages?: boolean | UserCountOutputTypeCountMessagesArgs
   sentOtpInvites?: boolean | UserCountOutputTypeCountSentOtpInvitesArgs
+  issuedWarnings?: boolean | UserCountOutputTypeCountIssuedWarningsArgs
 }
 
 /**
@@ -1372,15 +1519,15 @@ export type UserCountOutputTypeCountRecordingsArgs<ExtArgs extends runtime.Types
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountMeetingAttendeesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.MeetingAttendeeWhereInput
+export type UserCountOutputTypeCountCreatedMeetingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MeetingWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountCreatedMeetingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.MeetingWhereInput
+export type UserCountOutputTypeCountMeetingAttendeesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MeetingAttendeeWhereInput
 }
 
 /**
@@ -1418,6 +1565,13 @@ export type UserCountOutputTypeCountSentOtpInvitesArgs<ExtArgs extends runtime.T
   where?: Prisma.OtpInviteWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountIssuedWarningsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WarningWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1430,13 +1584,14 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   recordings?: boolean | Prisma.User$recordingsArgs<ExtArgs>
-  meetingAttendees?: boolean | Prisma.User$meetingAttendeesArgs<ExtArgs>
   createdMeetings?: boolean | Prisma.User$createdMeetingsArgs<ExtArgs>
+  meetingAttendees?: boolean | Prisma.User$meetingAttendeesArgs<ExtArgs>
   ownedSpaces?: boolean | Prisma.User$ownedSpacesArgs<ExtArgs>
   spaceMemberships?: boolean | Prisma.User$spaceMembershipsArgs<ExtArgs>
   createdChannels?: boolean | Prisma.User$createdChannelsArgs<ExtArgs>
   messages?: boolean | Prisma.User$messagesArgs<ExtArgs>
   sentOtpInvites?: boolean | Prisma.User$sentOtpInvitesArgs<ExtArgs>
+  issuedWarnings?: boolean | Prisma.User$issuedWarningsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1479,13 +1634,14 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "avatar" | "bio" | "phone" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   recordings?: boolean | Prisma.User$recordingsArgs<ExtArgs>
-  meetingAttendees?: boolean | Prisma.User$meetingAttendeesArgs<ExtArgs>
   createdMeetings?: boolean | Prisma.User$createdMeetingsArgs<ExtArgs>
+  meetingAttendees?: boolean | Prisma.User$meetingAttendeesArgs<ExtArgs>
   ownedSpaces?: boolean | Prisma.User$ownedSpacesArgs<ExtArgs>
   spaceMemberships?: boolean | Prisma.User$spaceMembershipsArgs<ExtArgs>
   createdChannels?: boolean | Prisma.User$createdChannelsArgs<ExtArgs>
   messages?: boolean | Prisma.User$messagesArgs<ExtArgs>
   sentOtpInvites?: boolean | Prisma.User$sentOtpInvitesArgs<ExtArgs>
+  issuedWarnings?: boolean | Prisma.User$issuedWarningsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1495,13 +1651,14 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     recordings: Prisma.$RecordingPayload<ExtArgs>[]
-    meetingAttendees: Prisma.$MeetingAttendeePayload<ExtArgs>[]
     createdMeetings: Prisma.$MeetingPayload<ExtArgs>[]
+    meetingAttendees: Prisma.$MeetingAttendeePayload<ExtArgs>[]
     ownedSpaces: Prisma.$SpacePayload<ExtArgs>[]
     spaceMemberships: Prisma.$SpaceMemberPayload<ExtArgs>[]
     createdChannels: Prisma.$ChannelPayload<ExtArgs>[]
     messages: Prisma.$MessagePayload<ExtArgs>[]
     sentOtpInvites: Prisma.$OtpInvitePayload<ExtArgs>[]
+    issuedWarnings: Prisma.$WarningPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1510,7 +1667,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     avatar: string | null
     bio: string | null
     phone: string | null
-    role: $Enums.Role
+    role: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1908,13 +2065,14 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   recordings<T extends Prisma.User$recordingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$recordingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecordingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  meetingAttendees<T extends Prisma.User$meetingAttendeesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$meetingAttendeesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MeetingAttendeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdMeetings<T extends Prisma.User$createdMeetingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdMeetingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  meetingAttendees<T extends Prisma.User$meetingAttendeesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$meetingAttendeesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MeetingAttendeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ownedSpaces<T extends Prisma.User$ownedSpacesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedSpacesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   spaceMemberships<T extends Prisma.User$spaceMembershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$spaceMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SpaceMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdChannels<T extends Prisma.User$createdChannelsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdChannelsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChannelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   messages<T extends Prisma.User$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sentOtpInvites<T extends Prisma.User$sentOtpInvitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sentOtpInvitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OtpInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  issuedWarnings<T extends Prisma.User$issuedWarningsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$issuedWarningsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WarningPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1950,7 +2108,7 @@ export interface UserFieldRefs {
   readonly avatar: Prisma.FieldRef<"User", 'String'>
   readonly bio: Prisma.FieldRef<"User", 'String'>
   readonly phone: Prisma.FieldRef<"User", 'String'>
-  readonly role: Prisma.FieldRef<"User", 'Role'>
+  readonly role: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -2365,30 +2523,6 @@ export type User$recordingsArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * User.meetingAttendees
- */
-export type User$meetingAttendeesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the MeetingAttendee
-   */
-  select?: Prisma.MeetingAttendeeSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the MeetingAttendee
-   */
-  omit?: Prisma.MeetingAttendeeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.MeetingAttendeeInclude<ExtArgs> | null
-  where?: Prisma.MeetingAttendeeWhereInput
-  orderBy?: Prisma.MeetingAttendeeOrderByWithRelationInput | Prisma.MeetingAttendeeOrderByWithRelationInput[]
-  cursor?: Prisma.MeetingAttendeeWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.MeetingAttendeeScalarFieldEnum | Prisma.MeetingAttendeeScalarFieldEnum[]
-}
-
-/**
  * User.createdMeetings
  */
 export type User$createdMeetingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2410,6 +2544,30 @@ export type User$createdMeetingsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.MeetingScalarFieldEnum | Prisma.MeetingScalarFieldEnum[]
+}
+
+/**
+ * User.meetingAttendees
+ */
+export type User$meetingAttendeesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MeetingAttendee
+   */
+  select?: Prisma.MeetingAttendeeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MeetingAttendee
+   */
+  omit?: Prisma.MeetingAttendeeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MeetingAttendeeInclude<ExtArgs> | null
+  where?: Prisma.MeetingAttendeeWhereInput
+  orderBy?: Prisma.MeetingAttendeeOrderByWithRelationInput | Prisma.MeetingAttendeeOrderByWithRelationInput[]
+  cursor?: Prisma.MeetingAttendeeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MeetingAttendeeScalarFieldEnum | Prisma.MeetingAttendeeScalarFieldEnum[]
 }
 
 /**
@@ -2530,6 +2688,30 @@ export type User$sentOtpInvitesArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.OtpInviteScalarFieldEnum | Prisma.OtpInviteScalarFieldEnum[]
+}
+
+/**
+ * User.issuedWarnings
+ */
+export type User$issuedWarningsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Warning
+   */
+  select?: Prisma.WarningSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Warning
+   */
+  omit?: Prisma.WarningOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WarningInclude<ExtArgs> | null
+  where?: Prisma.WarningWhereInput
+  orderBy?: Prisma.WarningOrderByWithRelationInput | Prisma.WarningOrderByWithRelationInput[]
+  cursor?: Prisma.WarningWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WarningScalarFieldEnum | Prisma.WarningScalarFieldEnum[]
 }
 
 /**

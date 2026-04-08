@@ -51,6 +51,19 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        brand: {
+          black: '#000000',       
+          sidebar: '#111111',     
+          main: '#0A0A0A',        
+          surface: '#1A1A1A',     
+          surfaceHover: '#222222',
+          border: '#2A2A2A',      
+          red: '#E60000',         
+          darkRed: '#B30000',
+          text: '#FFFFFF',        
+          gray: '#A1A1AA',        
+          darkGray: '#52525B',    
+        }
       },
       borderRadius: {
         lg: "var(--radius)",

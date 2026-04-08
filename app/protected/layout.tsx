@@ -14,7 +14,7 @@ export default function ProtectedLayout({
         </div>
 
         <footer className="w-full max-w-[1200px] border-t border-black/10 px-4 py-8 text-center text-xs text-black/60 dark:border-white/10 dark:text-white/60 md:px-10">
-          <p>© 2026 Afriland Workspace. Tous droits reserves.</p>
+          <p>© 2025 Afriland Workspace. Tous droits reserves.</p>
         </footer>
       </div>
     </main>

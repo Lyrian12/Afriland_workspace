@@ -3,24 +3,25 @@ generator client {
   output   = "../src/generated/prisma"
 }
 
-// ⚠️ Plus de datasource url ici en Prisma 7 !
-// La connexion est gérée dans prisma.config.ts
 datasource db {
   provider = "postgresql"
 }
 
-// ENUMS
+// ─────────────────────────────────────────
+// ENUMS GLOBAUX
 // ─────────────────────────────────────────
 
-enum Role {
-  ADMIN
-  SECRETARY
-  USER
+// GlobalRole enum removed to use String instead to avoid DB type conflicts
+
+enum SpaceRole {
+  ADMIN // créateur de l'espace
+  MODERATOR // nommé par l'admin
+  MEMBER // accès via OTP
 }
 
 enum MemberStatus {
   ACTIVE
-  BANNED
+  WARNED
   BLOCKED
 }
 
@@ -36,6 +37,15 @@ enum MessageType {
   FILE
   AUDIO
   IMAGE
+  SYSTEM
+}
+
+enum NotificationType {
+  MENTION
+  WARNING
+  PIN
+  NEW_MESSAGE
+  SYSTEM
 }
 
 // ─────────────────────────────────────────
@@ -49,18 +59,24 @@ model User {
   avatar    String?
   bio       String?
   phone     String?
-  role      Role     @default(USER)
+  role      String   @default("SECRETAIRE")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  recordings       Recording[]
-  meetingAttendees MeetingAttendee[]
+  // Afriland Record
+  recordings Recording[]
+
+  // Afriland Room
   createdMeetings  Meeting[]         @relation("MeetingCreator")
-  ownedSpaces      Space[]           @relation("SpaceOwner")
+  meetingAttendees MeetingAttendee[]
+
+  // Afriland Space
+  ownedSpaces      Space[]       @relation("SpaceOwner")
   spaceMemberships SpaceMember[]
-  createdChannels  Channel[]         @relation("ChannelCreator")
+  createdChannels  Channel[]     @relation("ChannelCreator")
   messages         Message[]
-  sentOtpInvites   OtpInvite[]       @relation("OtpSender")
+  sentOtpInvites   OtpInvite[]   @relation("OtpSender")
+  issuedWarnings   Warning[]     @relation("WarningIssuer")
 }
 
 // ─────────────────────────────────────────
@@ -92,10 +108,11 @@ model Recording {
 
 model Room {
   id          String   @id @default(cuid())
-  name        String // "Salle A", "Salle B", "Salle C", "Salle D"
+  name        String
   capacity    Int      @default(20)
   location    String?
   description String?
+  color       String   @default("#1f1f1f")
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
 
@@ -150,8 +167,8 @@ model Space {
   name        String
   description String?
   icon        String?
-  isPrivate   Boolean  @default(false)
-  inviteCode  String?  @unique
+  objective   String?
+  adminRole   String // rôle AFB du créateur ex: "Responsable Comptabilité"
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -167,21 +184,37 @@ model Space {
 
 model SpaceMember {
   id           String       @id @default(cuid())
+  role         SpaceRole    @default(MEMBER)
   status       MemberStatus @default(ACTIVE)
-  role         Role         @default(USER)
   joinedAt     DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
   blockedUntil DateTime?
-  banReason    String?
 
   space   Space  @relation(fields: [spaceId], references: [id], onDelete: Cascade)
   spaceId String
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
+  warnings      Warning[]
+  notifications Notification[]
 
   @@unique([spaceId, userId])
   @@index([spaceId])
+  @@index([userId])
+}
+
+model Warning {
+  id        String   @id @default(cuid())
+  reason    String
+  createdAt DateTime @default(now())
+
+  member   SpaceMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId String
+
+  issuedBy User   @relation("WarningIssuer", fields: [userId], references: [id])
+  userId   String
+
+  @@index([memberId])
 }
 
 model Channel {
@@ -198,7 +231,8 @@ model Channel {
   createdBy User   @relation("ChannelCreator", fields: [userId], references: [id])
   userId    String
 
-  messages Message[]
+  messages      Message[]
+  notifications Notification[]
 
   @@unique([spaceId, name])
   @@index([spaceId])
@@ -209,6 +243,8 @@ model Message {
   content   String      @db.Text
   type      MessageType @default(TEXT)
   fileUrl   String?
+  isPinned  Boolean     @default(false)
+  pinnedAt  DateTime?
   editedAt  DateTime?
   createdAt DateTime    @default(now())
 
@@ -222,19 +258,17 @@ model Message {
   replyToId String?
   replies   Message[] @relation("MessageReplies")
 
+  notifications Notification[]
+
   @@index([channelId])
   @@index([userId])
 }
 
-// ─────────────────────────────────────────
-// OTP INVITE
-// ─────────────────────────────────────────
-
 model OtpInvite {
   id        String    @id @default(cuid())
   email     String
-  code      String
-  expiresAt DateTime
+  code      String    @unique
+  expiresAt DateTime // now() + 2 minutes à la création
   usedAt    DateTime?
   createdAt DateTime  @default(now())
 
@@ -244,6 +278,26 @@ model OtpInvite {
   sentBy User   @relation("OtpSender", fields: [userId], references: [id])
   userId String
 
-  @@index([email, code])
+  @@index([email])
+  @@index([code])
   @@index([spaceId])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  type      NotificationType
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  member   SpaceMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId String
+
+  channel   Channel? @relation(fields: [channelId], references: [id])
+  channelId String?
+
+  message   Message? @relation(fields: [messageId], references: [id])
+  messageId String?
+
+  @@index([memberId])
+  @@index([channelId])
 }

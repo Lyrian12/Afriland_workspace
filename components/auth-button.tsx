@@ -8,14 +8,12 @@ import { User } from "lucide-react";
 export async function AuthButton() {
   const supabase = await createClient();
 
-  const { data } = await supabase.auth.getClaims();
-  const user = data?.claims;
+  const { data: { user } } = await supabase.auth.getUser();
 
   // Fetch the full user object to get avatar_url from metadata
   let avatarUrl: string | null = null;
   if (user) {
-    const { data: userData } = await supabase.auth.getUser();
-    avatarUrl = userData?.user?.user_metadata?.avatar_url ?? null;
+    avatarUrl = user.user_metadata?.avatar_url ?? null;
   }
 
   return user ? (

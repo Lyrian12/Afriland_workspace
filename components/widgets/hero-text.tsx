@@ -55,7 +55,7 @@ export const HeroText = () => {
       border: "border border-[#e0e0e0]",
       iconBg: "bg-black text-white",
       arrowBg: "bg-black text-white",
-      link: null,
+      link: "/space-intro",
     },
   ];
 
