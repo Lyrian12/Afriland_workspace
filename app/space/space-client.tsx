@@ -1,16 +1,10 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { searchWorkspaceUsersByEmail, type WorkspaceUserSearchResult } from "./actions";
-
-type Message = {
-  id: string;
-  user: { name: string; avatar?: string; initial?: string; role?: string };
-  time: string;
-  content: string;
-  reactions?: { emoji: string; count: number }[];
-};
+import { useChat } from "@/lib/hooks/useChat";
 
 type Objective = {
   id: string;
@@ -22,10 +16,12 @@ type Session = {
   id: string;
   name: string;
   isConnected: boolean;
+  canInvite: boolean;
+  isPersisted: boolean;
+  defaultChannelId: string | null;
 };
 
 type SessionState = {
-  messages: Message[];
   description: string;
   objectives: Objective[];
   participants: SessionParticipant[];
@@ -41,16 +37,18 @@ type SessionParticipant = {
 };
 
 const DEFAULT_SESSION: Session = {
-  id: "general",
+  id: "local-general",
   name: "générale",
-  isConnected: true,
+  isConnected: false,
+  canInvite: false,
+  isPersisted: false,
+  defaultChannelId: null,
 };
 
 const DEFAULT_DESCRIPTION =
   "Cet espace est dédié à votre travail. Respectez la zone et collaborez efficacement.";
 
 const createDefaultSessionState = (participants: SessionParticipant[] = []): SessionState => ({
-  messages: [],
   description: DEFAULT_DESCRIPTION,
   objectives: [],
   participants,
@@ -61,33 +59,70 @@ const normalizeSessionName = (value: string): string => {
 };
 
 interface SpaceClientProps {
+  userId: string;
+  userEmail: string;
   userName: string;
   avatarUrl: string | null;
   userRole: string;
+  initialSpaces: Array<{
+    id: string;
+    name: string;
+    canInvite: boolean;
+    defaultChannelId: string | null;
+  }>;
 }
 
-export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps) {
+export function SpaceClient({
+  userId,
+  userEmail,
+  userName,
+  avatarUrl,
+  userRole,
+  initialSpaces,
+}: SpaceClientProps) {
+  const searchParams = useSearchParams();
+  const selectedSpaceIdFromQuery = searchParams.get("spaceId")?.trim() || "";
+
   const currentUserParticipant: SessionParticipant = useMemo(
     () => ({
-      id: "current-user",
+      id: userId,
       name: userName,
-      email: null,
+      email: userEmail,
       avatar: avatarUrl,
       role: userRole,
       isOnline: true,
     }),
-    [avatarUrl, userName, userRole],
+    [avatarUrl, userEmail, userId, userName, userRole],
   );
+
+  const initialSessions: Session[] = useMemo(() => {
+    if (initialSpaces.length > 0) {
+      return initialSpaces.map((space) => ({
+        id: space.id,
+        name: space.name,
+        isConnected: false,
+        canInvite: space.canInvite,
+        isPersisted: true,
+        defaultChannelId: space.defaultChannelId,
+      }));
+    }
+
+    return [{ ...DEFAULT_SESSION, canInvite: false, isPersisted: false, defaultChannelId: null }];
+  }, [initialSpaces]);
 
   const [messageInput, setMessageInput] = useState("");
   const [isEditingDesc, setIsEditingDesc] = useState(false);
   const [newObjective, setNewObjective] = useState("");
   const [isAddingObjective, setIsAddingObjective] = useState(false);
 
-  const [sessions, setSessions] = useState<Session[]>([DEFAULT_SESSION]);
-  const [activeSessionId, setActiveSessionId] = useState(DEFAULT_SESSION.id);
-  const [sessionStates, setSessionStates] = useState<Record<string, SessionState>>({
-    [DEFAULT_SESSION.id]: createDefaultSessionState([currentUserParticipant]),
+  const [sessions, setSessions] = useState<Session[]>(initialSessions);
+  const [activeSessionId, setActiveSessionId] = useState(initialSessions[0]?.id ?? DEFAULT_SESSION.id);
+  const [sessionStates, setSessionStates] = useState<Record<string, SessionState>>(() => {
+    const states: Record<string, SessionState> = {};
+    for (const session of initialSessions) {
+      states[session.id] = createDefaultSessionState([currentUserParticipant]);
+    }
+    return states;
   });
   const [isAddingSession, setIsAddingSession] = useState(false);
   const [newSessionName, setNewSessionName] = useState("");
@@ -97,11 +132,38 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
   const [isSearchingUsers, setIsSearchingUsers] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [selectedSearchUserId, setSelectedSearchUserId] = useState<string | null>(null);
+  const [invitedUserIdsBySession, setInvitedUserIdsBySession] = useState<Record<string, string[]>>({});
+  const [inviteFeedback, setInviteFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [inviteSendingUserId, setInviteSendingUserId] = useState<string | null>(null);
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const activeSessionName =
-    sessions.find((session) => session.id === activeSessionId)?.name || DEFAULT_SESSION.name;
+  const activeSession = sessions.find((session) => session.id === activeSessionId);
+  const activeSessionName = activeSession?.name || DEFAULT_SESSION.name;
   const activeSessionState = sessionStates[activeSessionId] ?? createDefaultSessionState();
-  const connectedPeopleCount = activeSessionState.participants.filter((participant) => participant.isOnline).length;
+  const canInviteInActiveSession = Boolean(activeSession?.isPersisted && activeSession?.canInvite);
+  const activeChannelId = activeSession?.defaultChannelId ?? null;
+
+  const {
+    isConnected: isSocketConnected,
+    messages: chatMessages,
+    typingUsers,
+    participants: realtimeParticipants,
+    sendMessage,
+    startTyping,
+    stopTyping,
+  } = useChat({
+    channelId: activeChannelId,
+    userId,
+    userName,
+    avatar: avatarUrl,
+    spaceId: activeSession?.isPersisted ? activeSession.id : null,
+  });
+
+  const visibleParticipants = activeSession?.isPersisted
+    ? realtimeParticipants
+    : activeSessionState.participants;
+  const displayedMessages = activeSession?.isPersisted ? chatMessages : [];
+  const connectedPeopleCount = visibleParticipants.filter((participant) => participant.isOnline).length;
 
   const [currentTime, setCurrentTime] = useState("");
 
@@ -126,23 +188,32 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
       };
     });
 
-    setSessions((previous) => {
-      let updated = false;
-      const nextSessions = previous.map((session) => {
-        if (session.id === activeSessionId && !session.isConnected) {
-          updated = true;
-          return { ...session, isConnected: true };
-        }
-        return session;
-      });
-
-      return updated ? nextSessions : previous;
-    });
-
     setIsEditingDesc(false);
     setIsAddingObjective(false);
     setNewObjective("");
-  }, [activeSessionId, currentUserParticipant]);
+    setInviteFeedback(null);
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = null;
+    }
+    stopTyping();
+  }, [activeSessionId, currentUserParticipant, stopTyping]);
+
+  useEffect(() => {
+    setSessions((previous) =>
+      previous.map((session) => ({
+        ...session,
+        isConnected: session.id === activeSessionId ? isSocketConnected : false,
+      })),
+    );
+  }, [activeSessionId, isSocketConnected]);
+
+  useEffect(() => {
+    if (!selectedSpaceIdFromQuery) return;
+    if (!sessions.some((session) => session.id === selectedSpaceIdFromQuery)) return;
+    if (activeSessionId === selectedSpaceIdFromQuery) return;
+    setActiveSessionId(selectedSpaceIdFromQuery);
+  }, [activeSessionId, selectedSpaceIdFromQuery, sessions]);
 
   useEffect(() => {
     const trimmedQuery = searchInput.trim();
@@ -152,6 +223,7 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
       setSelectedSearchUserId(null);
       setIsSearchingUsers(false);
       setSearchError(null);
+      setInviteFeedback(null);
       return;
     }
 
@@ -186,6 +258,15 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
     };
   }, [searchInput]);
 
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = null;
+      }
+    };
+  }, []);
+
   const updateActiveSessionState = (updater: (state: SessionState) => SessionState) => {
     setSessionStates((previous) => {
       const current = previous[activeSessionId] ?? createDefaultSessionState();
@@ -198,18 +279,13 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
 
   const handleSendMessage = () => {
     if (!messageInput.trim()) return;
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      user: { name: userName, avatar: avatarUrl || undefined, initial: userName.charAt(0), role: userRole },
-      time: new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
-      content: messageInput.trim(),
-    };
-
-    updateActiveSessionState((current) => ({
-      ...current,
-      messages: [...current.messages, newMessage],
-    }));
+    sendMessage(messageInput.trim(), "TEXT");
     setMessageInput("");
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = null;
+    }
+    stopTyping();
   };
 
   const addObjective = () => {
@@ -232,33 +308,67 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
     setIsAddingObjective(false);
   };
 
-  const handleInviteUser = (workspaceUser: WorkspaceUserSearchResult) => {
-    updateActiveSessionState((current) => {
-      if (current.participants.some((participant) => participant.id === workspaceUser.id)) {
-        return current;
+  const handleInviteUser = async (workspaceUser: WorkspaceUserSearchResult) => {
+    if (!activeSession?.id) return;
+
+    if (!canInviteInActiveSession) {
+      setInviteFeedback({
+        type: "error",
+        message: "Seul un administrateur de cet espace peut envoyer des invitations.",
+      });
+      return;
+    }
+
+    setInviteSendingUserId(workspaceUser.id);
+    setInviteFeedback(null);
+
+    try {
+      const response = await fetch("/api/space/invite", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: workspaceUser.email,
+          spaceId: activeSession.id,
+        }),
+      });
+
+      const payload = (await response.json().catch(() => ({}))) as { error?: string };
+      if (!response.ok) {
+        throw new Error(payload.error || "Impossible d'envoyer l'invitation.");
       }
 
-      return {
-        ...current,
-        participants: [
-          ...current.participants,
-          {
-            id: workspaceUser.id,
-            name: workspaceUser.name || workspaceUser.email.split("@")[0],
-            email: workspaceUser.email,
-            avatar: workspaceUser.avatar,
-            role: workspaceUser.role,
-            isOnline: true,
-          },
-        ],
-      };
-    });
+      setInvitedUserIdsBySession((previous) => {
+        const current = previous[activeSession.id] ?? [];
+        if (current.includes(workspaceUser.id)) return previous;
+        return {
+          ...previous,
+          [activeSession.id]: [...current, workspaceUser.id],
+        };
+      });
+
+      setInviteFeedback({
+        type: "success",
+        message: `Invitation envoyée à ${workspaceUser.email}.`,
+      });
+    } catch (error) {
+      setInviteFeedback({
+        type: "error",
+        message: error instanceof Error ? error.message : "Impossible d'envoyer l'invitation.",
+      });
+    } finally {
+      setInviteSendingUserId(null);
+    }
   };
 
   const handleDeleteSession = (sessionId: string) => {
-    if (sessionId === DEFAULT_SESSION.id) return;
+    if (sessions.length <= 1) return;
 
-    setSessions((previous) => previous.filter((session) => session.id !== sessionId));
+    const remainingSessions = sessions.filter((session) => session.id !== sessionId);
+    if (remainingSessions.length === 0) return;
+
+    setSessions(remainingSessions);
     setSessionStates((previous) => {
       const next = { ...previous };
       delete next[sessionId];
@@ -266,7 +376,7 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
     });
 
     if (activeSessionId === sessionId) {
-      setActiveSessionId(DEFAULT_SESSION.id);
+      setActiveSessionId(remainingSessions[0].id);
     }
   };
 
@@ -359,7 +469,17 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
                           }
 
                           const newId = `session-${Date.now()}`;
-                          setSessions([...sessions, { id: newId, name: uniqueName, isConnected: false }]);
+                          setSessions([
+                            ...sessions,
+                            {
+                              id: newId,
+                              name: uniqueName,
+                              isConnected: false,
+                              canInvite: false,
+                              isPersisted: false,
+                              defaultChannelId: null,
+                            },
+                          ]);
                           setSessionStates({
                             ...sessionStates,
                             [newId]: createDefaultSessionState([currentUserParticipant]),
@@ -416,8 +536,24 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
                     <div className="px-3 py-2 text-[12px] text-brand-gray">Recherche en cours...</div>
                   )}
 
+                  {searchInput.trim().length >= 2 && !isSearchingUsers && !canInviteInActiveSession && (
+                    <div className="px-3 py-2 text-[12px] text-amber-300 border-b border-brand-border/60">
+                      Vous devez être administrateur de cet espace pour inviter des utilisateurs.
+                    </div>
+                  )}
+
                   {searchInput.trim().length >= 2 && !isSearchingUsers && searchError && (
                     <div className="px-3 py-2 text-[12px] text-brand-red">{searchError}</div>
+                  )}
+
+                  {inviteFeedback && (
+                    <div
+                      className={`px-3 py-2 text-[12px] border-b border-brand-border/60 ${
+                        inviteFeedback.type === "success" ? "text-green-300" : "text-brand-red"
+                      }`}
+                    >
+                      {inviteFeedback.message}
+                    </div>
                   )}
 
                   {searchInput.trim().length >= 2 &&
@@ -433,9 +569,8 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
                     <ul className="divide-y divide-brand-border">
                       {searchResults.map((workspaceUser) => {
                         const isSelected = selectedSearchUserId === workspaceUser.id;
-                        const isInvited = activeSessionState.participants.some(
-                          (participant) => participant.id === workspaceUser.id,
-                        );
+                        const isInvited = (invitedUserIdsBySession[activeSessionId] ?? []).includes(workspaceUser.id);
+                        const isSending = inviteSendingUserId === workspaceUser.id;
 
                         return (
                           <li key={workspaceUser.id} className="px-3 py-2">
@@ -458,15 +593,16 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
                                 <button
                                   onClick={(event) => {
                                     event.stopPropagation();
-                                    handleInviteUser(workspaceUser);
+                                    void handleInviteUser(workspaceUser);
                                   }}
-                                  className={`text-[11px] font-semibold px-2.5 py-1 rounded border transition-colors ${
+                                  disabled={isInvited || isSending || !canInviteInActiveSession}
+                                  className={`text-[11px] font-semibold px-2.5 py-1 rounded border transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
                                     isInvited
                                       ? "text-green-400 border-green-500/40 bg-green-500/10"
                                       : "text-brand-red border-brand-red/40 hover:bg-brand-red/10"
                                   }`}
                                 >
-                                  {isInvited ? "Invité" : "Inviter"}
+                                  {isSending ? "Envoi..." : isInvited ? "Invité" : "Inviter"}
                                 </button>
                               </div>
                             )}
@@ -541,7 +677,7 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
               </div>
             </div>
 
-            {activeSessionState.messages.map((message) => (
+            {displayedMessages.map((message) => (
               <div
                 key={message.id}
                 className="message-row relative flex gap-4 px-6 py-1.5 mt-2 hover:bg-brand-surface/40 transition-colors group"
@@ -557,34 +693,30 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
                 </div>
 
                 <div className="shrink-0 mt-0.5 cursor-pointer">
-                  {message.user.avatar ? (
+                  {message.sender.avatar ? (
                     <img
-                      src={message.user.avatar}
+                      src={message.sender.avatar}
                       className="w-10 h-10 rounded-md object-cover hover:opacity-80 transition-opacity shadow-sm"
                       alt="Avatar"
                     />
                   ) : (
                     <div className="w-10 h-10 rounded-md bg-brand-red flex items-center justify-center font-bold text-white text-lg shadow-sm hover:opacity-90 transition-opacity">
-                      {message.user.initial}
+                      {message.sender.name.substring(0, 1).toUpperCase()}
                     </div>
                   )}
                 </div>
 
                 <div className="flex flex-col min-w-0 flex-1">
                   <div className="flex items-baseline gap-2 mb-0.5">
-                    <span
-                      className={`font-bold text-[15px] ${
-                        message.user.role === "Admin" ? "text-brand-red" : "text-white"
-                      } hover:underline cursor-pointer`}
-                    >
-                      {message.user.name}
+                    <span className="font-bold text-[15px] text-white hover:underline cursor-pointer">
+                      {message.sender.name}
                     </span>
-                    {message.user.role && (
-                      <span className="bg-brand-red/10 text-brand-red text-[9px] uppercase font-bold px-1 rounded-sm border border-brand-red/20">
-                        {message.user.role}
-                      </span>
-                    )}
-                    <span className="text-[11px] text-brand-darkGray font-medium">{message.time}</span>
+                    <span className="text-[11px] text-brand-darkGray font-medium">
+                      {new Date(message.createdAt).toLocaleTimeString("fr-FR", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
                   </div>
                   <div className="text-[15px] text-brand-text leading-[1.45] whitespace-pre-wrap">
                     {message.content}
@@ -593,13 +725,19 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
               </div>
             ))}
 
-            {activeSessionState.messages.length === 0 && (
+            {displayedMessages.length === 0 && (
               <div className="flex items-center gap-3 px-6 py-2 mt-4 text-[13px] text-brand-gray bg-brand-surface/30 mx-6 rounded-lg border border-brand-border/50">
                 <i className="ph-fill ph-info text-brand-red text-lg"></i>
                 <span>
                   Commencez à discuter dans cette session. Les messages restent indépendants des autres
                   sessions.
                 </span>
+              </div>
+            )}
+
+            {typingUsers.length > 0 && (
+              <div className="px-6 mt-3 text-[12px] text-brand-gray italic">
+                {typingUsers.map((entry) => entry.userName).join(", ")} est en train d&apos;écrire...
               </div>
             )}
             <div className="h-2"></div>
@@ -614,7 +752,29 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
                 rows={1}
                 placeholder={`Message #${activeSessionName}...`}
                 value={messageInput}
-                onChange={(event) => setMessageInput(event.target.value)}
+                onChange={(event) => {
+                  const nextValue = event.target.value;
+                  setMessageInput(nextValue);
+
+                  if (!activeChannelId) return;
+
+                  if (nextValue.trim().length > 0) {
+                    startTyping();
+                    if (typingTimeoutRef.current) {
+                      clearTimeout(typingTimeoutRef.current);
+                    }
+                    typingTimeoutRef.current = setTimeout(() => {
+                      stopTyping();
+                      typingTimeoutRef.current = null;
+                    }, 1000);
+                  } else {
+                    if (typingTimeoutRef.current) {
+                      clearTimeout(typingTimeoutRef.current);
+                      typingTimeoutRef.current = null;
+                    }
+                    stopTyping();
+                  }
+                }}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" && !event.shiftKey) {
                     event.preventDefault();
@@ -666,23 +826,23 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
               </div>
               <div className="bg-brand-surface/60 rounded-lg border border-brand-border p-2">
                 <div className="text-[10px] text-brand-gray uppercase tracking-wider">Total</div>
-                <div className="text-lg font-bold text-white">{activeSessionState.participants.length}</div>
+                <div className="text-lg font-bold text-white">{visibleParticipants.length}</div>
               </div>
             </div>
 
             <div className="text-[11px] text-brand-gray mb-2">
               Hors ligne:{" "}
               <span className="text-white font-semibold">
-                {Math.max(0, activeSessionState.participants.length - connectedPeopleCount)}
+                {Math.max(0, visibleParticipants.length - connectedPeopleCount)}
               </span>
             </div>
 
             <div className="space-y-1">
-              {activeSessionState.participants.map((participant) => (
+              {visibleParticipants.map((participant) => (
                 <div
                   key={participant.id}
                   className={`flex items-center justify-between p-2 rounded-lg border transition-colors ${
-                    participant.id === "current-user"
+                    participant.id === userId
                       ? "bg-brand-surface border-brand-red/30"
                       : "bg-brand-surface/40 border-brand-border"
                   }`}
@@ -717,8 +877,11 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
                       : "bg-brand-surface/40 border-brand-border hover:bg-brand-surface"
                   }`}
                 >
-                  <span className="text-[13px] text-white truncate">{session.name}</span>
-                  {session.id !== DEFAULT_SESSION.id ? (
+                  <span className="text-[13px] text-white truncate">
+                    {session.name}
+                    {session.canInvite && <span className="ml-2 text-[10px] text-green-300 uppercase">admin</span>}
+                  </span>
+                  {sessions.length > 1 ? (
                     <span
                       onClick={(event) => {
                         event.stopPropagation();
@@ -729,7 +892,9 @@ export function SpaceClient({ userName, avatarUrl, userRole }: SpaceClientProps)
                       Supprimer
                     </span>
                   ) : (
-                    <span className="text-[10px] text-brand-gray">par défaut</span>
+                    <span className="text-[10px] text-brand-gray">
+                      {session.isPersisted ? "espace actif" : "local"}
+                    </span>
                   )}
                 </button>
               ))}

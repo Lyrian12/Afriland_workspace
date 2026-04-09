@@ -1,7 +1,7 @@
 'use client'
 import { createClient } from '@/lib/supabase/client'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { AfrilandLogo } from '@/components/afriland-logo'
 
@@ -11,7 +11,9 @@ export default function SignInPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
+  const nextPath = searchParams.get('next') || '/'
 
   // Connexion Email + Mot de passe
   const handleSignIn = async () => {
@@ -25,7 +27,7 @@ export default function SignInPage() {
     if (error) {
       setError('E-mail ou mot de passe incorrect.')
     } else {
-      router.push('/')
+      router.push(nextPath)
       router.refresh()
     }
   }
@@ -36,7 +38,7 @@ export default function SignInPage() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${location.origin}/auth/callback`,
+        redirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
       },
     })
     if (error) setError(error.message)

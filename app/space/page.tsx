@@ -3,6 +3,7 @@ import { SpaceClient } from '@/app/space/space-client';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { Suspense } from 'react';
+import { prisma } from '@/lib/prisma';
 
 export const metadata: Metadata = {
   title: 'Afriland Space',
@@ -34,11 +35,54 @@ async function SpaceContent() {
   }
   const userRole = user.user_metadata?.role || "Membre";
 
+  const memberships = await prisma.spaceMember.findMany({
+    where: {
+      userId: user.id,
+      status: "ACTIVE",
+    },
+    select: {
+      role: true,
+      space: {
+        select: {
+          id: true,
+          name: true,
+          ownerId: true,
+          channels: {
+            where: {
+              isDefault: true,
+            },
+            select: {
+              id: true,
+            },
+            take: 1,
+          },
+        },
+      },
+    },
+    orderBy: {
+      joinedAt: "asc",
+    },
+  });
+
+  if (memberships.length === 0) {
+    return redirect('/space-intro');
+  }
+
+  const initialSpaces = memberships.map((membership) => ({
+    id: membership.space.id,
+    name: membership.space.name,
+    canInvite: membership.role === "ADMIN" && membership.space.ownerId === user.id,
+    defaultChannelId: membership.space.channels[0]?.id ?? null,
+  }));
+
   return (
     <SpaceClient 
+      userId={user.id}
+      userEmail={user.email || ""}
       userName={userName}
       avatarUrl={avatarUrl}
       userRole={userRole}
+      initialSpaces={initialSpaces}
     />
   );
 }

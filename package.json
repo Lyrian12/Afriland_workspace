@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "socket": "bun run server.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint ."
@@ -29,6 +30,9 @@
     "pg": "^8.20.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "resend": "^6.10.0",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "tailwind-merge": "^3.3.0",
     "zustand": "^5.0.11"
   },
