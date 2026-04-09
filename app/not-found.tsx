@@ -79,10 +79,10 @@ export default function NotFound() {
         
         <div className="text-center mt-4">
           <p className="font-mono text-sm uppercase tracking-[0.3em] mb-2 opacity-50">
-            Salle inexistante
+            Page inexistante
           </p>
           <h2 className="text-2xl md:text-4xl font-light mb-12">
-            Cette zone n'est pas sur les plans.
+            Revenez a AFRILAND WORKSPACE.
           </h2>
         </div>
 

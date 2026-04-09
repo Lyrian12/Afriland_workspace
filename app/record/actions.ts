@@ -5,11 +5,21 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from "@/src/generated/prisma/client";
 import { createClient } from "@/lib/supabase/server";
 
-// --- Prisma Logic ---
-// We use the Pool adapter for better compatibility with Supabase in serverless/long-running environments
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-const adapter = new PrismaPg(pool as any);
-const prisma = new PrismaClient({ adapter });
+// --- Prisma Singleton ---
+// Use a lazy-initialized singleton to ensure we pick up the latest environment variables
+let prisma: PrismaClient;
+
+function getPrisma() {
+  if (!prisma) {
+    const connectionString = process.env.DATABASE_URL;
+    if (!connectionString) throw new Error("DATABASE_URL is not set");
+    
+    const pool = new Pool({ connectionString });
+    const adapter = new PrismaPg(pool as any);
+    prisma = new PrismaClient({ adapter });
+  }
+  return prisma;
+}
 
 // --- Auth Utilities ---
 async function getAuthUser() {
@@ -21,6 +31,7 @@ async function getAuthUser() {
 
 // --- Sync Logic ---
 async function ensureUserSynced(user: any) {
+  const prisma = getPrisma();
   return await prisma.user.upsert({
     where: { id: user.id },
     update: {},
@@ -39,6 +50,7 @@ async function ensureUserSynced(user: any) {
 export async function getUserRecordings() {
   try {
     const user = await getAuthUser();
+    const prisma = getPrisma();
     return await prisma.recording.findMany({
       where: { userId: user.id },
       orderBy: { createdAt: "desc" },
@@ -55,6 +67,7 @@ export async function saveRecording(data: { title?: string, duration: number, tr
 
   const title = data.title || `Enregistrement du ${new Date().toLocaleDateString("fr-FR")}`;
 
+  const prisma = getPrisma();
   return await prisma.recording.create({
     data: {
       userId: user.id,
@@ -68,6 +81,7 @@ export async function saveRecording(data: { title?: string, duration: number, tr
 
 export async function deleteRecording(recordingId: string) {
   const user = await getAuthUser();
+  const prisma = getPrisma();
 
   return await prisma.recording.delete({
     where: {
