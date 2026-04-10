@@ -27,6 +27,16 @@ export type RealtimeParticipant = {
   isOnline: boolean;
 };
 
+type SendMessageAck =
+  | {
+      ok: true;
+      message: ChatMessage;
+    }
+  | {
+      ok: false;
+      error: string;
+    };
+
 type UseChatParams = {
   channelId: string | null;
   userId: string;
@@ -156,11 +166,25 @@ export function useChat({ channelId, userId, userName, avatar, spaceId }: UseCha
   const sendMessage = useCallback(
     (content: string, type: "TEXT" | "FILE" | "AUDIO" | "IMAGE" | "SYSTEM" = "TEXT") => {
       if (!socket || !channelId || !content.trim()) return;
-      socket.emit("send_message", {
-        channelId,
-        content: content.trim(),
-        type,
-      });
+      const trimmedContent = content.trim();
+
+      socket.emit("join_channel", { channelId });
+      socket.emit(
+        "send_message",
+        {
+          channelId,
+          content: trimmedContent,
+          type,
+        },
+        (result?: SendMessageAck) => {
+          if (!result || !result.ok) return;
+
+          setMessages((previous) => {
+            if (previous.some((existing) => existing.id === result.message.id)) return previous;
+            return [...previous, result.message];
+          });
+        },
+      );
     },
     [socket, channelId],
   );

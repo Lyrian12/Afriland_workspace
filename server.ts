@@ -8,6 +8,16 @@ type SocketAuth = {
   spaceId?: string;
 };
 
+type SendMessagePayload = {
+  channelId?: string;
+  content?: string;
+  type?: MessageType | string;
+};
+
+type SendMessageAck =
+  | { ok: true; message: { id: string; content: string; createdAt: string; sender: { id: string; name: string; avatar: string | null } } }
+  | { ok: false; error: string };
+
 type PresenceEntry = {
   userId: string;
   userName: string;
@@ -173,12 +183,14 @@ io.on("connection", async (socket) => {
     socket.emit("channel_joined", { channelId });
   });
 
-  socket.on(
-    "send_message",
-    async (payload: { channelId?: string; content?: string; type?: MessageType | string }) => {
+  socket.on("send_message", async (payload: SendMessagePayload, ack?: (result: SendMessageAck) => void) => {
+    try {
       const channelId = payload?.channelId?.trim();
       const content = payload?.content?.trim();
-      if (!channelId || !content) return;
+      if (!channelId || !content) {
+        ack?.({ ok: false, error: "Paramètres de message invalides." });
+        return;
+      }
 
       const channel = await prisma.channel.findFirst({
         where: {
@@ -190,12 +202,18 @@ io.on("connection", async (socket) => {
         },
       });
 
-      if (!channel) return;
+      if (!channel) {
+        ack?.({ ok: false, error: "Canal introuvable." });
+        return;
+      }
 
       const rawType = payload?.type;
       const messageType = Object.values(MessageType).includes(rawType as MessageType)
         ? (rawType as MessageType)
         : MessageType.TEXT;
+
+      // Ensure the sender is in the channel room before broadcasting.
+      socket.join(`channel:${channelId}`);
 
       const message = await prisma.message.create({
         data: {
@@ -219,7 +237,7 @@ io.on("connection", async (socket) => {
         },
       });
 
-      io.to(`channel:${channelId}`).emit("new_message", {
+      const messagePayload = {
         id: message.id,
         content: message.content,
         createdAt: message.createdAt.toISOString(),
@@ -228,9 +246,15 @@ io.on("connection", async (socket) => {
           name: message.sender.name || message.sender.email.split("@")[0],
           avatar: message.sender.avatar,
         },
-      });
-    },
-  );
+      };
+
+      io.to(`channel:${channelId}`).emit("new_message", messagePayload);
+      ack?.({ ok: true, message: messagePayload });
+    } catch (error) {
+      console.error("Socket send_message error:", error);
+      ack?.({ ok: false, error: "Impossible d'envoyer le message." });
+    }
+  });
 
   socket.on("typing_start", (payload: { channelId?: string }) => {
     const channelId = payload?.channelId?.trim();
